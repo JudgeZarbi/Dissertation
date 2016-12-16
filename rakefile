@@ -1,0 +1,24 @@
+require "rake/clean"
+
+CXX="g++"
+FLAGS="-Wall -Wextra -O2 -std=c++1y"
+CXXFLAGS=`sdl2-config --cflags`.strip << ' ' << `pkg-config SDL2_image --cflags`.strip
+LDFLAGS=`sdl2-config --libs`.strip << ' ' << `pkg-config SDL2_image --libs`.strip << ' -lGLEW -lGL'
+
+SOURCE_FILES = Rake::FileList["src/**/*.cpp"]
+object_files = Rake::FileList["bin/*.o"]
+
+task :default => "voxel"
+task :o => SOURCE_FILES.ext(".o")#
+
+file "voxel" => :o do |target|
+	object_files = Rake::FileList["bin/*.o"]
+	sh "#{CXX} #{FLAGS} #{object_files} -o voxel #{LDFLAGS}"
+end
+
+rule '.o' => '.cpp' do |target|
+  	sh "#{CXX} #{FLAGS} #{CXXFLAGS} -c src/#{target.source.partition('src/')[2]} -o bin/#{target.name.pathmap("%f")}"
+end
+
+CLEAN.include(object_files)
+CLOBBER << "voxel"
