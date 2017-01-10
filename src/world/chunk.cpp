@@ -1,4 +1,5 @@
 #include "chunk.h"
+#include "../block/block.h"
 
 namespace World
 {
@@ -41,14 +42,14 @@ namespace World
 				double max_y = noise * Y;
 				for (int y = 0; y < max_y - 5; y++)
 				{
-					voxel[x][y][z] = 3;
+					voxel[x][y][z] = Block(3);
 				}
 				for (int y = max_y-5; y < max_y - 1; y++)
 				{
-					voxel[x][y][z] = 2;
+					voxel[x][y][z] = Block(2);
 				}
 				int y = max_y - 1;
-				voxel[x][y][z] = 1;
+				voxel[x][y][z] = Block(1);
 			}
 		}
 		init = true;
