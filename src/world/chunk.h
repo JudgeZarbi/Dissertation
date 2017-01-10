@@ -35,7 +35,7 @@ namespace World
 		void build_vertices();
 		bool is_visible(int x, int y, int z, int xadj, int yadj, int zadj);
 		void render(GLint coord);
-		Block::Block get_block(int x, int y, int z);
+		Block::Blocks get_block(int x, int y, int z);
 
 	};
 }
