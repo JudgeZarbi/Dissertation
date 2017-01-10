@@ -9,6 +9,7 @@ namespace Block
 	{
 		uint8_t type;
 
+		Block(): type(0) {};
 		Block(uint8_t type): type(type) {};
 
 //		virtual bool rightClick();	

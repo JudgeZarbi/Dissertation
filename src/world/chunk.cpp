@@ -1,5 +1,4 @@
 #include "chunk.h"
-#include "../block/block.h"
 
 namespace World
 {
@@ -42,14 +41,14 @@ namespace World
 				double max_y = noise * Y;
 				for (int y = 0; y < max_y - 5; y++)
 				{
-					voxel[x][y][z] = Block(3);
+					voxel[x][y][z] = Block::Block(3);
 				}
 				for (int y = max_y-5; y < max_y - 1; y++)
 				{
-					voxel[x][y][z] = Block(2);
+					voxel[x][y][z] = Block::Block(2);
 				}
 				int y = max_y - 1;
-				voxel[x][y][z] = Block(1);
+				voxel[x][y][z] = Block::Block(1);
 			}
 		}
 		init = true;
@@ -233,13 +232,13 @@ namespace World
 	bool Chunk::is_visible(int x, int y, int z, int xadj, int yadj, int zadj)
 	{
 		//If the block does not exist/is "air" then it isn't visible.
-		if(!voxel[x][y][z])
+		if(!voxel[x][y][z].type)
 		{
 			return false;
 		}
 
 		//If a block exists in the next slot along, then the face of this block is not visible, and we can skip it.
-		if(get_block(xadj, yadj, zadj))
+		if(get_block(xadj, yadj, zadj).type)
 		{
 			return false;
 		}
@@ -252,7 +251,7 @@ namespace World
 	//This method is to be used with the possibility of the block being outside the chunk. 
 	//If we can absolutely guarantee that it's not, simply use voxel[x][y][z].
 	//It's almost certainly computationally cheaper.
-	uint8_t Chunk::get_block(int x, int y, int z)
+	Block::Block Chunk::get_block(int x, int y, int z)
 	{
 		if(x < 0)
 		{

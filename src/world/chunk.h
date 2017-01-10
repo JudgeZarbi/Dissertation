@@ -5,6 +5,7 @@
 #include "SDL.h"
 #include "../util/simplex.h"
 #include "../util/vertex.h"
+#include "../block/block.h"
 
 namespace World
 {
@@ -14,7 +15,7 @@ namespace World
 
 	struct Chunk
 	{
-		uint8_t voxel[X][Y][Z];
+		Block::Block voxel[X][Y][Z];
 		GLuint vbo;
 		int elements;
 		bool init;
@@ -34,7 +35,7 @@ namespace World
 		void build_vertices();
 		bool is_visible(int x, int y, int z, int xadj, int yadj, int zadj);
 		void render(GLint coord);
-		uint8_t get_block(int x, int y, int z);
+		Block::Block get_block(int x, int y, int z);
 
 	};
 }
