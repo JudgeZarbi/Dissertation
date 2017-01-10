@@ -71,7 +71,7 @@ namespace World
 						continue;
 					}
 
-					uint8_t side = voxel[x][y][z];
+					uint8_t side = voxel[x][y][z].type;
  
 					vertices[i++] = Util::vertex(x, y, z, side);
 					vertices[i++] = Util::vertex(x, y, z + 1, side);
@@ -94,7 +94,7 @@ namespace World
 						continue;
 					}
 
-					uint8_t side = voxel[x][y][z];
+					uint8_t side = voxel[x][y][z].type;
 				
 					vertices[i++] = Util::vertex(x + 1, y, z + 1, side);
 					vertices[i++] = Util::vertex(x + 1, y, z, side);
@@ -118,7 +118,7 @@ namespace World
 						continue;
 					}
 
-					uint8_t bottom = voxel[x][y][z];
+					uint8_t bottom = voxel[x][y][z].type;
 
 					if (bottom == 1)
 					{
@@ -146,7 +146,7 @@ namespace World
 						continue;
 					}
 
-					uint8_t top = voxel[x][y][z];
+					uint8_t top = voxel[x][y][z].type;
 
 					if (top == 1)
 					{
@@ -175,7 +175,7 @@ namespace World
 						continue;
 					}
 
-					uint8_t side = voxel[x][y][z];
+					uint8_t side = voxel[x][y][z].type;
 
 					vertices[i++] = Util::vertex(x + 1, y, z, side);
 					vertices[i++] = Util::vertex(x, y, z, side);
@@ -198,7 +198,7 @@ namespace World
 						continue;
 					}
 					
-					uint8_t side = voxel[x][y][z];
+					uint8_t side = voxel[x][y][z].type;
 
 					vertices[i++] = Util::vertex(x, y, z + 1, side);
 					vertices[i++] = Util::vertex(x + 1, y, z + 1, side);
