@@ -6,12 +6,12 @@ namespace Block
 {
 	struct Block
 	{
-		uint8_t type
+		uint8_t type;
 
 		Block(uint8_t type): type(type) {};
 
 //		virtual bool rightClick();	
-	}
+	};
 
 }
 
