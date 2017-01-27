@@ -12,7 +12,7 @@ namespace Block
 		Block(): type(0) {};
 		Block(uint8_t type): type(type) {};
 
-//		virtual bool rightClick();	
+		virtual bool rightClick() { return false; };	
 	};
 
 }
