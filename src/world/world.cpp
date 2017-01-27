@@ -11,7 +11,7 @@ namespace World
 				for(int z = 0; z < CHUNKS_Z; z++)
 				{
 					chunks[x][y][z] = new Chunk();
-					chunks[x][y][z]->initialise(x, z);
+					chunks[x][y][z]->initialise(x, y, z);
 				}
 			}
 		}

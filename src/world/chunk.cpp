@@ -2,7 +2,7 @@
 
 namespace World
 {
-	Chunk::Chunk()
+	Chunk::Chunk(int cx, int cy, int cz): cx(cx), cy(cy), cz(cz)
 	{
 		memset(voxel, 0, sizeof(voxel));
 		l = r = b = f = u = d = 0;
@@ -31,7 +31,7 @@ namespace World
 	// 		}
 
 
-	void Chunk::initialise(int cx, int cz)
+	void Chunk::initialise()
 	{
 		for(int x = 0; x < X; x++)
 		{
@@ -260,6 +260,10 @@ namespace World
 		if(x >= X)
 		{
 			return r ? r->voxel[x - X][y][z] : 0;
+		}
+		if (y < 0 || y >= Y)
+		{
+			return 0;
 		}
 		if(z < 0)
 		{
