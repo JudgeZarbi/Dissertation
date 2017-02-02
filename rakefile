@@ -14,11 +14,11 @@ task :o => SOURCE_FILES.ext(".o")#
 
 file "voxel" => :o do |target|
 	object_files = Rake::FileList["bin/*.o"]
-	sh "#{CXX} #{FLAGS} #{object_files} -o voxel #{LDFLAGS}"
+	sh "#{CXX} #{DFLAGS} #{object_files} -o voxel #{LDFLAGS}"
 end
 
 rule '.o' => '.cpp' do |target|
-  	sh "#{CXX} #{FLAGS} #{CXXFLAGS} -c src/#{target.source.partition('src/')[2]} -o bin/#{target.name.pathmap("%f")}"
+  	sh "#{CXX} #{DFLAGS} #{CXXFLAGS} -c src/#{target.source.partition('src/')[2]} -o bin/#{target.name.pathmap("%f")}"
 end
 
 CLEAN.include(object_files)
