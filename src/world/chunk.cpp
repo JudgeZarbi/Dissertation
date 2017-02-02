@@ -7,6 +7,8 @@ namespace World
 		memset(voxel, 0, sizeof(voxel));
 		l = r = b = f = u = d = 0;
 		init = false;
+		changed = false;
+		glGenBuffers(1, &vbo);
 	}
 
 	//4D generation, no x listed, but is same as 3D
@@ -41,14 +43,14 @@ namespace World
 				double max_y = noise * Y;
 				for (int y = 0; y < max_y - 5; y++)
 				{
-					voxel[x][y][z] = Block::Block(3);
+					voxel[x][y][z] = new Block::Block(3);
 				}
 				for (int y = max_y-5; y < max_y - 1; y++)
 				{
-					voxel[x][y][z] = Block::Block(2);
+					voxel[x][y][z] = new Block::Block(2);
 				}
 				int y = max_y - 1;
-				voxel[x][y][z] = Block::Block(1);
+				voxel[x][y][z] = new Block::Block(1);
 			}
 		}
 		init = true;
@@ -61,7 +63,7 @@ namespace World
 		// Cube left side
 		for(int x = X - 1; x >= 0; x--) 
 		{
-			for(int y = 0; y < Y; y++) 
+			for(int y = 0; y < Y; y++)
 			{
 				for(int z = 0; z < Z; z++) 
 				{
@@ -70,7 +72,11 @@ namespace World
 						continue;
 					}
 
-					uint8_t side = voxel[x][y][z].type;
+					if(!voxel[x][y][z])
+					{
+						continue;
+					}
+					uint8_t side = voxel[x][y][z]->type;
  
 					vertices[i++] = Util::vertex(x, y, z, side);
 					vertices[i++] = Util::vertex(x, y, z + 1, side);
@@ -93,7 +99,11 @@ namespace World
 						continue;
 					}
 
-					uint8_t side = voxel[x][y][z].type;
+					if(!voxel[x][y][z])
+					{
+						continue;
+					}
+					uint8_t side = voxel[x][y][z]->type;
 				
 					vertices[i++] = Util::vertex(x + 1, y, z + 1, side);
 					vertices[i++] = Util::vertex(x + 1, y, z, side);
@@ -117,7 +127,11 @@ namespace World
 						continue;
 					}
 
-					uint8_t bottom = voxel[x][y][z].type;
+					if(!voxel[x][y][z])
+					{
+						continue;
+					}
+					uint8_t bottom = voxel[x][y][z]->type;
 
 					if (bottom == 1)
 					{
@@ -145,7 +159,11 @@ namespace World
 						continue;
 					}
 
-					uint8_t top = voxel[x][y][z].type;
+					if(!voxel[x][y][z])
+					{
+						continue;
+					}
+					uint8_t top = voxel[x][y][z]->type;
 
 					if (top == 1)
 					{
@@ -174,7 +192,11 @@ namespace World
 						continue;
 					}
 
-					uint8_t side = voxel[x][y][z].type;
+					if(!voxel[x][y][z])
+					{
+						continue;
+					}
+					uint8_t side = voxel[x][y][z]->type;
 
 					vertices[i++] = Util::vertex(x + 1, y, z, side);
 					vertices[i++] = Util::vertex(x, y, z, side);
@@ -197,7 +219,11 @@ namespace World
 						continue;
 					}
 					
-					uint8_t side = voxel[x][y][z].type;
+					if(!voxel[x][y][z])
+					{
+						continue;
+					}
+					uint8_t side = voxel[x][y][z]->type;
 
 					vertices[i++] = Util::vertex(x, y, z + 1, side);
 					vertices[i++] = Util::vertex(x + 1, y, z + 1, side);
@@ -212,10 +238,10 @@ namespace World
 		elements = i;
 		std::cout << std::to_string(i) << std::endl;
 
-		glGenBuffers(1, &vbo);
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
 		glBufferData(GL_ARRAY_BUFFER, i * sizeof(Util::vertex), vertices, GL_STATIC_DRAW);
 		delete[] vertices;
+		changed = false;
 	}
 
 	void Chunk::render(GLint coord)
@@ -223,6 +249,10 @@ namespace World
 		if(!elements)
 		{
 			return;
+		}
+		if(changed)
+		{
+			build_vertices();
 		}
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
 		glVertexAttribPointer(coord, 4, GL_UNSIGNED_BYTE, GL_FALSE, 0, 0);
@@ -232,13 +262,14 @@ namespace World
 	bool Chunk::is_visible(int x, int y, int z, int xadj, int yadj, int zadj)
 	{
 		//If the block does not exist/is "air" then it isn't visible.
-		if(!voxel[x][y][z].type)
+		if(voxel[x][y][z] && !voxel[x][y][z]->type)
 		{
 			return false;
 		}
 
 		//If a block exists in the next slot along, then the face of this block is not visible, and we can skip it.
-		if(get_block(xadj, yadj, zadj).type)
+		Block::Block* blk = get_block(xadj, yadj, zadj);
+		if(blk && blk->type)
 		{
 			return false;
 		}
@@ -251,7 +282,7 @@ namespace World
 	//This method is to be used with the possibility of the block being outside the chunk. 
 	//If we can absolutely guarantee that it's not, simply use voxel[x][y][z].
 	//It's almost certainly computationally cheaper.
-	Block::Block Chunk::get_block(int x, int y, int z)
+	Block::Block* Chunk::get_block(int x, int y, int z)
 	{
 		if(x < 0)
 		{

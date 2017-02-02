@@ -26,7 +26,7 @@ using namespace std;
 #include "world/world.h"
 
 int screen_width=800, screen_height=600;
-int blocktypes = 4;
+int blocktypes = 7;
 GLuint program;
 GLuint texarray;
 GLint attribute_coord;
@@ -130,6 +130,15 @@ void mainLoop(SDL_Window* window)
 				Controls::mouseMotion(&ev.motion, &Util::angle);
 				Util::update_vectors();
 			}
+			else if (ev.type == SDL_MOUSEBUTTONDOWN)
+			{
+				if (ev.button.button == SDL_BUTTON_RIGHT)
+				{
+					std::cout << "Right Click!" << std::endl;
+					world->chunks[1][0][1]->voxel[8][148][3]->rightClick();
+					world->chunks[1][0][1]->changed = true;
+				}
+			}
 			else if (ev.type == SDL_WINDOWEVENT && ev.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
 			{
 				onResize(ev.window.data1, ev.window.data2);
@@ -143,6 +152,7 @@ void mainLoop(SDL_Window* window)
 		{
 			Util::movement(keys);			
 		}
+//		std::cout << "(" << Util::position.x << ", " << Util::position.y << ", " << Util::position.z << ")" << std::endl;
 		render(window);
 	}
 }

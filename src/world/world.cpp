@@ -12,6 +12,10 @@ namespace World
 				{
 					chunks[x][y][z] = new Chunk(x, y, z);
 					chunks[x][y][z]->initialise();
+					if (x == 1 && z == 1)
+					{
+						chunks[1][0][1]->voxel[8][148][3] = new Block::ColourBlock();
+					}
 				}
 			}
 		}
@@ -86,6 +90,6 @@ namespace World
 				}
 			}
 		}
-		std::cout << rendered << std::endl;
+//		std::cout << rendered << std::endl;
 	}	
 }

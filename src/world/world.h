@@ -16,6 +16,7 @@ namespace World
 	struct World
 	{
 		Chunk* chunks[CHUNKS_X][CHUNKS_Y][CHUNKS_Z];
+		Block::Block* colour;
 
 		World();
 
