@@ -6,6 +6,8 @@
 #include "../util/simplex.h"
 #include "../util/vertex.h"
 #include "../block/block.h"
+#include "../block/rcblock.h"
+#include "../block/colourblock.h"
 
 namespace World
 {
@@ -15,10 +17,11 @@ namespace World
 
 	struct Chunk
 	{
-		Block::Block voxel[X][Y][Z];
+		Block::Block* voxel[X][Y][Z];
 		GLuint vbo;
 		int elements;
 		bool init;
+		bool changed;
 		Chunk* l;
 		Chunk* r;
 		Chunk* b;
@@ -35,8 +38,10 @@ namespace World
 		void build_vertices();
 		bool is_visible(int x, int y, int z, int xadj, int yadj, int zadj);
 		void render(GLint coord);
-		Block::Block get_block(int x, int y, int z);
+		Block::Block* get_block(int x, int y, int z);
 
 	};
+
 }
+
 #endif
