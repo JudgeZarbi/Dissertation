@@ -72,10 +72,6 @@ namespace World
 						continue;
 					}
 
-					if(!voxel[x][y][z])
-					{
-						continue;
-					}
 					uint8_t side = voxel[x][y][z]->type;
  
 					vertices[i++] = Util::vertex(x, y, z, side);
@@ -99,10 +95,6 @@ namespace World
 						continue;
 					}
 
-					if(!voxel[x][y][z])
-					{
-						continue;
-					}
 					uint8_t side = voxel[x][y][z]->type;
 				
 					vertices[i++] = Util::vertex(x + 1, y, z + 1, side);
@@ -127,10 +119,6 @@ namespace World
 						continue;
 					}
 
-					if(!voxel[x][y][z])
-					{
-						continue;
-					}
 					uint8_t bottom = voxel[x][y][z]->type;
 
 					if (bottom == 1)
@@ -159,10 +147,6 @@ namespace World
 						continue;
 					}
 
-					if(!voxel[x][y][z])
-					{
-						continue;
-					}
 					uint8_t top = voxel[x][y][z]->type;
 
 					if (top == 1)
@@ -192,10 +176,6 @@ namespace World
 						continue;
 					}
 
-					if(!voxel[x][y][z])
-					{
-						continue;
-					}
 					uint8_t side = voxel[x][y][z]->type;
 
 					vertices[i++] = Util::vertex(x + 1, y, z, side);
@@ -262,14 +242,13 @@ namespace World
 	bool Chunk::is_visible(int x, int y, int z, int xadj, int yadj, int zadj)
 	{
 		//If the block does not exist/is "air" then it isn't visible.
-		if(voxel[x][y][z] && !voxel[x][y][z]->type)
+		if(!voxel[x][y][z])
 		{
 			return false;
 		}
 
 		//If a block exists in the next slot along, then the face of this block is not visible, and we can skip it.
-		Block::Block* blk = get_block(xadj, yadj, zadj);
-		if(blk && blk->type)
+		if(get_block(xadj, yadj, zadj))
 		{
 			return false;
 		}
