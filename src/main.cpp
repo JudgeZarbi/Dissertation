@@ -34,6 +34,10 @@ GLint uniform_mvp;
 GLint uniform_texture;
 World::World* world;
 
+bool target = false;
+int mx, my, mz;
+int face;
+
 bool init_resources()
 {
 	//wat even is this necessary for
@@ -152,7 +156,6 @@ void mainLoop(SDL_Window* window)
 		{
 			Util::movement(keys);			
 		}
-//		std::cout << "(" << Util::position.x << ", " << Util::position.y << ", " << Util::position.z << ")" << std::endl;
 		render(window);
 	}
 }

@@ -1,7 +1,6 @@
 #ifndef JZ_COLOURBLOCK_H
 #define JZ_COLOURBLOCK_H
 #include "rcblock.h"
-#include <iostream>
 
 namespace Block
 {
@@ -10,6 +9,7 @@ namespace Block
 		ColourBlock(): RightClickBlock(5) {};
 
 		bool rightClick();
+
 	};
 }
 
