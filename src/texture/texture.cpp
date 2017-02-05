@@ -27,6 +27,7 @@ namespace Texture
 		{
 			SDL_Surface* tex = IMG_Load(("textures/tex_" + std::to_string(i) + ".png").data());
 			if (tex == NULL) {
+				std::cerr << "IMG_Load: " << SDL_GetError() << std::endl;
 				continue;
 			}
 

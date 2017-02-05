@@ -59,6 +59,7 @@ namespace World
 
 	void World::render(GLint coord, GLint uniform, glm::mat4 &pv)
 	{
+		int rendered = 0;
 		for(int x = 0; x < CHUNKS_X; x++)
 		{
 			for(int y = 0; y < CHUNKS_Y; y++)
@@ -85,17 +86,10 @@ namespace World
 					glUniformMatrix4fv(uniform, 1, GL_FALSE, glm::value_ptr(mvp));
 
 					chunks[x][y][z]->render(coord);
+					rendered += 1;
 				}
 			}
 		}
+//		std::cout << rendered << std::endl;
 	}	
-
-	Block::Block* World::getBlock(int x, int y, int z) {
-		int cx = x / X;
-		int cy = y / Y;
-		int cz = z / Z;
-
-		return chunks[cx][cy][cz]->get_block(x & (CHUNKS_X - 1), y & (CHUNKS_Y - 1), z & (CHUNKS_Z - 1));
-	}
-
 }
