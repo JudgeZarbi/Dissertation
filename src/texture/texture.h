@@ -4,7 +4,7 @@
 #include <GL/glew.h>
 #include "SDL.h"
 #include "SDL_image.h"
-
+#include <string>
 #include "../util/global.h"
 
 namespace Texture

@@ -32,6 +32,7 @@ GLuint texarray;
 GLint attribute_coord;
 GLint uniform_mvp;
 GLint uniform_texture;
+GLuint cursor_vbo;
 World::World* world;
 
 bool target = false;
@@ -65,11 +66,16 @@ bool init_resources()
 		return false;		
 	}	
 
+	glGenBuffers(1, &cursor_vbo);
+
 	return true;
 }
 
 void render(SDL_Window* window)
 {
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+
 	glm::mat4 view = glm::lookAt(Util::position, Util::position + Util::lookat, Util::up);
 	glm::mat4 projection = glm::perspective(45.0f, 1.0f*screen_width/screen_height, 0.1f, 1000.0f);
 
@@ -88,7 +94,98 @@ void render(SDL_Window* window)
 
 	world->render(attribute_coord, uniform_mvp, mvp);	
 	
-	glDisableVertexAttribArray(attribute_coord);
+	/*
+	glm::vec3 testpos = Util::position;
+	glm::vec3 prevpos = Util::position;
+
+	for(int i = 0; i < 100; i++) {
+
+		prevpos = testpos;
+		testpos += Util::lookat * 0.1f;
+
+		mx = floorf(testpos.x);
+		my = floorf(testpos.y);
+		mz = floorf(testpos.z);
+
+		if(world->getBlock(mx, my, mz))
+		{
+			target = true;
+			break;			
+		}
+		else
+		{
+			target = false;
+		}
+	}
+
+	int px = floorf(prevpos.x);
+	int py = floorf(prevpos.y);
+	int pz = floorf(prevpos.z);
+
+	if(px > mx)
+		face = 0;
+	else if(px < mx)
+		face = 3;
+	else if(py > my)
+		face = 1;
+	else if(py < my)
+		face = 4;
+	else if(pz > mz)
+		face = 2;
+	else if(pz < mz)
+		face = 5;
+
+	int box[24][4] = {
+		{mx + 0, my + 0, mz + 0, 8},
+		{mx + 1, my + 0, mz + 0, 8},
+		{mx + 0, my + 1, mz + 0, 8},
+		{mx + 1, my + 1, mz + 0, 8},
+		{mx + 0, my + 0, mz + 1, 8},
+		{mx + 1, my + 0, mz + 1, 8},
+		{mx + 0, my + 1, mz + 1, 8},
+		{mx + 1, my + 1, mz + 1, 8},
+
+		{mx + 0, my + 0, mz + 0, 8},
+		{mx + 0, my + 1, mz + 0, 8},
+		{mx + 1, my + 0, mz + 0, 8},
+		{mx + 1, my + 1, mz + 0, 8},
+		{mx + 0, my + 0, mz + 1, 8},
+		{mx + 0, my + 1, mz + 1, 8},
+		{mx + 1, my + 0, mz + 1, 8},
+		{mx + 1, my + 1, mz + 1, 8},
+
+		{mx + 0, my + 0, mz + 0, 8},
+		{mx + 0, my + 0, mz + 1, 8},
+		{mx + 1, my + 0, mz + 0, 8},
+		{mx + 1, my + 0, mz + 1, 8},
+		{mx + 0, my + 1, mz + 0, 8},
+		{mx + 0, my + 1, mz + 1, 8},
+		{mx + 1, my + 1, mz + 0, 8},
+		{mx + 1, my + 1, mz + 1, 8},
+	};
+
+	glDisable(GL_CULL_FACE);
+	glUniformMatrix4fv(uniform_mvp, 1, GL_FALSE, glm::value_ptr(mvp));
+	glBindBuffer(GL_ARRAY_BUFFER, cursor_vbo);
+	glBufferData(GL_ARRAY_BUFFER, sizeof box, box, GL_DYNAMIC_DRAW);
+	glVertexAttribPointer(attribute_coord, 4, GL_FLOAT, GL_FALSE, 0, 0);
+	glDrawArrays(GL_LINES, 0, 24);
+
+	float cross[4][4] = {
+		{-0.05, 0, 0, 13},
+		{+0.05, 0, 0, 13},
+		{0, -0.05, 0, 13},
+		{0, +0.05, 0, 13},
+	};
+
+	glDisable(GL_DEPTH_TEST);
+	glm::mat4 one(1);
+	glUniformMatrix4fv(uniform_mvp, 1, GL_FALSE, glm::value_ptr(one));
+	glBufferData(GL_ARRAY_BUFFER, sizeof cross, cross, GL_DYNAMIC_DRAW);
+	glVertexAttribPointer(attribute_coord, 4, GL_FLOAT, GL_FALSE, 0, 0);
+	glDrawArrays(GL_LINES, 0, 4);
+	*/
+
 	SDL_GL_SwapWindow(window);
 }
 

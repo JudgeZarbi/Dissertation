@@ -95,7 +95,7 @@ namespace World
 		int cy = y / Y;
 		int cz = z / Z;
 
-		return c[cx][cy][cz]->get_block(x & (CX - 1), y & (CY - 1), z & (CZ - 1));
+		return chunks[cx][cy][cz]->get_block(x & (CHUNKS_X - 1), y & (CHUNKS_Y - 1), z & (CHUNKS_Z - 1));
 	}
 
 }
