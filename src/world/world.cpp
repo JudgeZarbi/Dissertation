@@ -89,4 +89,13 @@ namespace World
 			}
 		}
 	}	
+
+	Block::Block World::getBlock(int x, int y, int z) {
+		int cx = x / X;
+		int cy = y / Y;
+		int cz = z / Z;
+
+		return c[cx][cy][cz]->get_block(x & (CX - 1), y & (CY - 1), z & (CZ - 1));
+	}
+
 }
