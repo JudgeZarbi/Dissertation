@@ -90,7 +90,7 @@ namespace World
 		}
 	}	
 
-	Block::Block World::getBlock(int x, int y, int z) {
+	Block::Block* World::getBlock(int x, int y, int z) {
 		int cx = x / X;
 		int cy = y / Y;
 		int cz = z / Z;

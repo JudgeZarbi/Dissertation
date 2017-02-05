@@ -22,7 +22,7 @@ namespace World
 
 		void render(GLint coord, GLint mvp, glm::mat4 &pv);
 
-		Block::Block getBlock(int x, int y, int z);
+		Block::Block* getBlock(int x, int y, int z);
 	};
 }
 
