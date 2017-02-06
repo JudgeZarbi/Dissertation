@@ -21,6 +21,7 @@ namespace World
 		World();
 
 		void render(GLint coord, GLint mvp, glm::mat4 &pv);
+		Block::Block* get(int x, int y, int z) const;
 	};
 }
 

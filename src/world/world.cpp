@@ -92,4 +92,18 @@ namespace World
 		}
 //		std::cout << rendered << std::endl;
 	}	
+
+	Block::Block* World::get(int x, int y, int z) const {
+		int cx = x / X;
+		int cy = y / Y;
+		int cz = z / Z;
+
+		std::cout << cx << " " << cy << " " << cz << std::endl;
+
+		if(cx < 0 || cx >= CHUNKS_X || cy < 0 || cy >= CHUNKS_Y || cz < 0 || cz >= CHUNKS_Z)
+			return 0;
+
+		return chunks[cx][cy][cz]->get_block(x & (X - 1), y & (Y - 1), z & (Z - 1));
+	}
+
 }

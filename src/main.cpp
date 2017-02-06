@@ -26,13 +26,18 @@ using namespace std;
 #include "world/world.h"
 
 int screen_width=800, screen_height=600;
-int blocktypes = 7;
+int blocktypes = 9;
 GLuint program;
 GLuint texarray;
 GLint attribute_coord;
 GLint uniform_mvp;
 GLint uniform_texture;
+GLuint cursor_vbo;
 World::World* world;
+
+int mx, my, mz;
+int face;
+
 
 bool init_resources()
 {
@@ -61,6 +66,16 @@ bool init_resources()
 		return false;		
 	}	
 
+	glPolygonOffset(1, 1);
+	glEnableVertexAttribArray(attribute_coord);
+	glClearColor(1.0, 1.0, 1.0, 1.0);
+	glUseProgram(program);
+	glGenBuffers(1, &cursor_vbo);
+	
+	glActiveTexture(GL_TEXTURE0);
+	glUniform1i(uniform_texture, /*GL_TEXTURE*/0);
+	
+
 	return true;
 }
 
@@ -72,19 +87,125 @@ void render(SDL_Window* window)
 	glm::mat4 mvp = projection * view;
 	glUniformMatrix4fv(uniform_mvp, 1, GL_FALSE, glm::value_ptr(mvp));
 
-	glClearColor(1.0, 1.0, 1.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-	
-	glUseProgram(program);
-	
-	glActiveTexture(GL_TEXTURE0);
-	glUniform1i(uniform_texture, /*GL_TEXTURE*/0);
-	
-	glEnableVertexAttribArray(attribute_coord);
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_POLYGON_OFFSET_FILL);
 
 	world->render(attribute_coord, uniform_mvp, mvp);	
 	
-	glDisableVertexAttribArray(attribute_coord);
+	/* At which voxel are we looking? */
+	/* Very naive ray casting algorithm to find out which block we are looking at */
+
+	glm::vec3 testpos = Util::position;
+	glm::vec3 prevpos = Util::position;
+
+	for(int i = 0; i < 100; i++) {
+		/* Advance from our currect position to the direction we are looking at, in small steps */
+
+		prevpos = testpos;
+		testpos += Util::lookat * 0.1f;
+
+		mx = floorf(testpos.x);
+		my = floorf(testpos.y);
+		mz = floorf(testpos.z);	
+
+		/* If we find a block that is not air, we are done */
+
+		std::cout << world->get(mx, my, mz) << std::endl;
+		if(world->get(mx, my, mz))
+		{
+			break;			
+		}
+	}
+
+	/* Find out which face of the block we are looking at */
+
+	int px = floorf(prevpos.x);
+	int py = floorf(prevpos.y);
+	int pz = floorf(prevpos.z);
+
+	if(px > mx)
+		face = 0;
+	else if(px < mx)
+		face = 3;
+	else if(py > my)
+		face = 1;
+	else if(py < my)
+		face = 4;
+	else if(pz > mz)
+		face = 2;
+	else if(pz < mz)
+		face = 5;
+
+	/* If we are looking at air, move the cursor out of sight */
+
+	if(!world->get(mx, my, mz))
+	{
+		mx = my = mz = 99999;
+	}
+
+
+	float bx = mx;
+	float by = my;
+	float bz = mz;
+
+	/* Render a box around the block we are pointing at */
+
+	float box[24][4] = {
+		{bx + 0, by + 0, bz + 0, 8},
+		{bx + 1, by + 0, bz + 0, 8},
+		{bx + 0, by + 1, bz + 0, 8},
+		{bx + 1, by + 1, bz + 0, 8},
+		{bx + 0, by + 0, bz + 1, 8},
+		{bx + 1, by + 0, bz + 1, 8},
+		{bx + 0, by + 1, bz + 1, 8},
+		{bx + 1, by + 1, bz + 1, 8},
+
+		{bx + 0, by + 0, bz + 0, 8},
+		{bx + 0, by + 1, bz + 0, 8},
+		{bx + 1, by + 0, bz + 0, 8},
+		{bx + 1, by + 1, bz + 0, 8},
+		{bx + 0, by + 0, bz + 1, 8},
+		{bx + 0, by + 1, bz + 1, 8},
+		{bx + 1, by + 0, bz + 1, 8},
+		{bx + 1, by + 1, bz + 1, 8},
+
+		{bx + 0, by + 0, bz + 0, 8},
+		{bx + 0, by + 0, bz + 1, 8},
+		{bx + 1, by + 0, bz + 0, 8},
+		{bx + 1, by + 0, bz + 1, 8},
+		{bx + 0, by + 1, bz + 0, 8},
+		{bx + 0, by + 1, bz + 1, 8},
+		{bx + 1, by + 1, bz + 0, 8},
+		{bx + 1, by + 1, bz + 1, 8},
+	};
+
+	glDisable(GL_POLYGON_OFFSET_FILL);
+	glDisable(GL_CULL_FACE);
+	glUniformMatrix4fv(uniform_mvp, 1, GL_FALSE, glm::value_ptr(mvp));
+	glBindBuffer(GL_ARRAY_BUFFER, cursor_vbo);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(box), box, GL_DYNAMIC_DRAW);
+	glVertexAttribPointer(attribute_coord, 4, GL_FLOAT, GL_FALSE, 0, 0);
+	glDrawArrays(GL_LINES, 0, 24);
+
+	/* Draw a cross in the center of the screen */
+
+	float cross[4][4] = {
+		{-0.05, 0, 0, 9},
+		{+0.05, 0, 0, 9},
+		{0, -0.05, 0, 9},
+		{0, +0.05, 0, 9},
+	};
+
+	glDisable(GL_DEPTH_TEST);
+	glm::mat4 one(1);
+	glUniformMatrix4fv(uniform_mvp, 1, GL_FALSE, glm::value_ptr(one));
+	glBufferData(GL_ARRAY_BUFFER, sizeof(cross), cross, GL_DYNAMIC_DRAW);
+	glVertexAttribPointer(attribute_coord, 4, GL_FLOAT, GL_FALSE, 0, 0);
+	glDrawArrays(GL_LINES, 0, 4);
+
+	/* And we are done */
+
 	SDL_GL_SwapWindow(window);
 }
 
