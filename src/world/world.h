@@ -1,5 +1,5 @@
-#ifndef _JZ_WORLD_H
-#define _JZ_WORLD_H
+#ifndef WORLD_WORLD_H
+#define WORLD_WORLD_H
 
 #define GLM_FORCE_RADIANS
 #include "chunk.h"

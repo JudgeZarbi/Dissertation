@@ -1,5 +1,5 @@
-#ifndef _JZ_TEXTURE_H
-#define _JZ_TEXTURE_H
+#ifndef CONTROLS_TEXTURE_H
+#define CONTROLS_TEXTURE_H
 
 #include <iostream>
 

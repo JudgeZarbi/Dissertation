@@ -1,5 +1,5 @@
-#ifndef _JZ_VERTEX_H
-#define _JZ_VERTEX_H
+#ifndef UTIL_VERTEX_H
+#define UTIL_VERTEX_H
 
 #include <iostream>
 

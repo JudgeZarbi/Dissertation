@@ -1,5 +1,5 @@
-#ifndef _JZ_KEYBOARD_H
-#define _JZ_KEYBOARD_H
+#ifndef CONTROLS_KEYBOARD_H
+#define _CONTROLS_KEYBOARD_H
 
 #include "SDL.h"
 

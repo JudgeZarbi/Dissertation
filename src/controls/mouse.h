@@ -1,5 +1,5 @@
-#ifndef _JZ_MOUSE_H
-#define _JZ_MOUSE_H
+#ifndef CONTROLS_MOUSE_H
+#define CONTROLS_MOUSE_H
 
 #include "SDL.h"
 #include <glm/glm.hpp>

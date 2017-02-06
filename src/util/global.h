@@ -1,5 +1,5 @@
-#ifndef _JZ_GLOBAL_H
-#define _JZ_GLOBAL_H
+#ifndef UTIL_GLOBAL_H
+#define UTIL_GLOBAL_H
 
 // A file to store values that are needed in various places.
 

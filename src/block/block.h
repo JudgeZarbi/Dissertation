@@ -1,5 +1,5 @@
-#ifndef _JZ_BASEBLOCK_H
-#define _JZ_BASEBLOCK_H
+#ifndef BLOCK_BLOCK_H
+#define BLOCK_BLOCK_H
 #include <cstdint>
 #include <iostream>
 

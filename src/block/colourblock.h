@@ -1,5 +1,5 @@
-#ifndef JZ_COLOURBLOCK_H
-#define JZ_COLOURBLOCK_H
+#ifndef BLOCK_COLOURBLOCK_H
+#define BLOCK_COLOURBLOCK_H
 #include "rcblock.h"
 #include <iostream>
 

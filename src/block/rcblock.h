@@ -1,5 +1,5 @@
-#ifndef JZ_RCBLOCK_H
-#define JZ_RCBLOCK_H
+#ifndef BLOCK_RCBLOCK_H
+#define BLOCK_RCBLOCK_H
 #include "block.h"
 
 namespace Block

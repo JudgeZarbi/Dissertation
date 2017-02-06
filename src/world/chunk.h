@@ -1,5 +1,5 @@
-#ifndef _JZ_CHUNK_H
-#define _JZ_CHUNK_H
+#ifndef WORLD_CHUNK_H
+#define WORLD_CHUNK_H
 
 #include <GL/glew.h>
 #include "SDL.h"

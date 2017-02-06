@@ -1,5 +1,5 @@
-#ifndef _JZ_PHYSICS_H
-#define _JZ_PHYSICS_H
+#ifndef UTIL_PHYSICS_H
+#define UTIL_PHYSICS_H
 
 #include "SDL.h"
 #include <glm/glm.hpp>

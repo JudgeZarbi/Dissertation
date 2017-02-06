@@ -1,5 +1,5 @@
-#ifndef _JZ_CREATE_SHADER_H
-#define _JZ_CREATE_SHADER_H
+#ifndef UTIL_SHADER_UTILS_H
+#define UTIL_SHADER_UTILS_H
 #include <GL/glew.h>
 #include "SDL.h"
 #include <iostream>

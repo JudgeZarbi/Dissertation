@@ -16,8 +16,8 @@
  */
 
 
-#ifndef SIMPLEX_H_
-#define SIMPLEX_H_
+#ifndef UTIL_SIMPLEX_H_
+#define UTIL_SIMPLEX_H_
 
 namespace Util
 {
