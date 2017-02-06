@@ -1,6 +1,6 @@
 #include "physics.h"
 
-namespace Util
+namespace Game
 {
 	int prev_ticks = 0;
 	int now = 0;

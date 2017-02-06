@@ -20,7 +20,7 @@
 
 #include "simplex.h"
 
-namespace Util
+namespace Game
 {
     /* 2D, 3D and 4D Simplex Noise functions return 'random' values in (-1, 1).
 

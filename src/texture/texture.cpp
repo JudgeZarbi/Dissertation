@@ -1,6 +1,6 @@
 #include "texture.h"
 
-namespace Texture 
+namespace Game
 {
 	GLuint load_block_textures()
 	{

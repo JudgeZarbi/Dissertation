@@ -1,6 +1,6 @@
 #include "world.h"
 
-namespace World
+namespace Game
 {
 	World::World()
 	{
@@ -14,7 +14,7 @@ namespace World
 					chunks[x][y][z]->initialise();
 					if (x == 1 && z == 1)
 					{
-						chunks[1][0][1]->voxel[8][148][3] = new Block::ColourBlock();
+						chunks[1][0][1]->voxel[8][148][3] = new ColourBlock();
 					}
 				}
 			}
@@ -93,7 +93,7 @@ namespace World
 //		std::cout << rendered << std::endl;
 	}	
 
-	Block::Block* World::get(int x, int y, int z) const {
+	Block* World::get(int x, int y, int z) const {
 		int cx = x / X;
 		int cy = y / Y;
 		int cz = z / Z;

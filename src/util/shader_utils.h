@@ -4,7 +4,7 @@
 #include "SDL.h"
 #include <iostream>
 
-namespace Util
+namespace Game
 {
 	extern char* file_read(const char* filename);
 	extern void print_log(GLuint object);

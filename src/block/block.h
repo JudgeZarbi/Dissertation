@@ -4,7 +4,7 @@
 #include <iostream>
 
 //The class from which all blocks are eventually derived from.
-namespace Block
+namespace Game
 {
 	struct Block
 	{

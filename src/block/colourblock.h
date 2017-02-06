@@ -3,7 +3,7 @@
 #include "rcblock.h"
 #include <iostream>
 
-namespace Block
+namespace Game
 {
 	struct ColourBlock : public RightClickBlock
 	{

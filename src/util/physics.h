@@ -4,7 +4,7 @@
 #include "SDL.h"
 #include <glm/glm.hpp>
 
-namespace Util
+namespace Game
 {
 	extern glm::vec3 position;
 	extern glm::vec3 vec_forward;

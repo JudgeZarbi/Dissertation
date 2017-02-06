@@ -2,7 +2,7 @@
 #define BLOCK_RCBLOCK_H
 #include "block.h"
 
-namespace Block
+namespace Game
 {
 	struct RightClickBlock : public Block
 	{

@@ -1,7 +1,7 @@
 /* Using SDL2 for the base window and OpenGL context init */
 #include "shader_utils.h"
 
-namespace Util
+namespace Game
 {
 	/**
 	 * Store all the file's contents in memory, useful to pass shaders

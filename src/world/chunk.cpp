@@ -1,6 +1,6 @@
 #include "chunk.h"
 
-namespace World
+namespace Game
 {
 	Chunk::Chunk(int cx, int cy, int cz): cx(cx), cy(cy), cz(cz)
 	{
@@ -39,18 +39,18 @@ namespace World
 		{
 			for(int z = 0; z < Z; z++)
 			{
-				double noise = Util::scaled_octave_noise_3d(10, 0.25, 1, 0.4, 0.6, (cx*16+x)/128.0, (cz*16+z)/128.0, 0);
+				double noise = scaled_octave_noise_3d(10, 0.25, 1, 0.4, 0.6, (cx*16+x)/128.0, (cz*16+z)/128.0, 0);
 				double max_y = noise * Y;
 				for (int y = 0; y < max_y - 5; y++)
 				{
-					voxel[x][y][z] = new Block::Block(3);
+					voxel[x][y][z] = new Block(3);
 				}
 				for (int y = max_y-5; y < max_y - 1; y++)
 				{
-					voxel[x][y][z] = new Block::Block(2);
+					voxel[x][y][z] = new Block(2);
 				}
 				int y = max_y - 1;
-				voxel[x][y][z] = new Block::Block(1);
+				voxel[x][y][z] = new Block(1);
 			}
 		}
 		init = true;
@@ -58,7 +58,7 @@ namespace World
 
 	void Chunk::build_vertices()
 	{
-		Util::vertex* vertices = new Util::vertex[X * Y * Z * 36];
+		vertex* vertices = new vertex[X * Y * Z * 36];
 		int i = 0;
 		// Cube left side
 		for(int x = X - 1; x >= 0; x--) 
@@ -74,12 +74,12 @@ namespace World
 
 					uint8_t side = voxel[x][y][z]->type;
  
-					vertices[i++] = Util::vertex(x, y, z, side);
-					vertices[i++] = Util::vertex(x, y, z + 1, side);
-					vertices[i++] = Util::vertex(x, y + 1, z, side);
-					vertices[i++] = Util::vertex(x, y + 1, z, side);
-					vertices[i++] = Util::vertex(x, y, z + 1, side);
-					vertices[i++] = Util::vertex(x, y + 1, z + 1, side);
+					vertices[i++] = vertex(x, y, z, side);
+					vertices[i++] = vertex(x, y, z + 1, side);
+					vertices[i++] = vertex(x, y + 1, z, side);
+					vertices[i++] = vertex(x, y + 1, z, side);
+					vertices[i++] = vertex(x, y, z + 1, side);
+					vertices[i++] = vertex(x, y + 1, z + 1, side);
 				}
 			}
 		}
@@ -97,12 +97,12 @@ namespace World
 
 					uint8_t side = voxel[x][y][z]->type;
 				
-					vertices[i++] = Util::vertex(x + 1, y, z + 1, side);
-					vertices[i++] = Util::vertex(x + 1, y, z, side);
-					vertices[i++] = Util::vertex(x + 1, y + 1, z + 1, side);
-					vertices[i++] = Util::vertex(x + 1, y + 1, z + 1, side);
-					vertices[i++] = Util::vertex(x + 1, y, z, side);
-					vertices[i++] = Util::vertex(x + 1, y + 1, z, side);
+					vertices[i++] = vertex(x + 1, y, z + 1, side);
+					vertices[i++] = vertex(x + 1, y, z, side);
+					vertices[i++] = vertex(x + 1, y + 1, z + 1, side);
+					vertices[i++] = vertex(x + 1, y + 1, z + 1, side);
+					vertices[i++] = vertex(x + 1, y, z, side);
+					vertices[i++] = vertex(x + 1, y + 1, z, side);
 				}
 			}
 		}
@@ -126,12 +126,12 @@ namespace World
 						bottom = 2;
 					}
 
-					vertices[i++] = Util::vertex(x, y, z, bottom);
-					vertices[i++] = Util::vertex(x + 1, y, z, bottom);
-					vertices[i++] = Util::vertex(x, y, z + 1, bottom);
-					vertices[i++] = Util::vertex(x + 1, y, z, bottom);
-					vertices[i++] = Util::vertex(x + 1, y, z + 1, bottom);
-					vertices[i++] = Util::vertex(x, y, z + 1, bottom);
+					vertices[i++] = vertex(x, y, z, bottom);
+					vertices[i++] = vertex(x + 1, y, z, bottom);
+					vertices[i++] = vertex(x, y, z + 1, bottom);
+					vertices[i++] = vertex(x + 1, y, z, bottom);
+					vertices[i++] = vertex(x + 1, y, z + 1, bottom);
+					vertices[i++] = vertex(x, y, z + 1, bottom);
 				}
 			}
 		}
@@ -154,12 +154,12 @@ namespace World
 						top = 4;
 					}
 					
-					vertices[i++] = Util::vertex(x, y + 1, z, top);
-					vertices[i++] = Util::vertex(x, y + 1, z + 1, top);
-					vertices[i++] = Util::vertex(x + 1, y + 1, z, top);
-					vertices[i++] = Util::vertex(x + 1, y + 1, z, top);
-					vertices[i++] = Util::vertex(x, y + 1, z + 1, top);
-					vertices[i++] = Util::vertex(x + 1, y + 1, z + 1, top);
+					vertices[i++] = vertex(x, y + 1, z, top);
+					vertices[i++] = vertex(x, y + 1, z + 1, top);
+					vertices[i++] = vertex(x + 1, y + 1, z, top);
+					vertices[i++] = vertex(x + 1, y + 1, z, top);
+					vertices[i++] = vertex(x, y + 1, z + 1, top);
+					vertices[i++] = vertex(x + 1, y + 1, z + 1, top);
 				}
 			}
 		}
@@ -178,12 +178,12 @@ namespace World
 
 					uint8_t side = voxel[x][y][z]->type;
 
-					vertices[i++] = Util::vertex(x + 1, y, z, side);
-					vertices[i++] = Util::vertex(x, y, z, side);
-					vertices[i++] = Util::vertex(x + 1, y + 1, z, side);
-					vertices[i++] = Util::vertex(x + 1, y + 1, z, side);
-					vertices[i++] = Util::vertex(x, y, z, side);
-					vertices[i++] = Util::vertex(x, y + 1, z, side);
+					vertices[i++] = vertex(x + 1, y, z, side);
+					vertices[i++] = vertex(x, y, z, side);
+					vertices[i++] = vertex(x + 1, y + 1, z, side);
+					vertices[i++] = vertex(x + 1, y + 1, z, side);
+					vertices[i++] = vertex(x, y, z, side);
+					vertices[i++] = vertex(x, y + 1, z, side);
 				}
 			}
 		}
@@ -205,12 +205,12 @@ namespace World
 					}
 					uint8_t side = voxel[x][y][z]->type;
 
-					vertices[i++] = Util::vertex(x, y, z + 1, side);
-					vertices[i++] = Util::vertex(x + 1, y, z + 1, side);
-					vertices[i++] = Util::vertex(x, y + 1, z + 1, side);
-					vertices[i++] = Util::vertex(x, y + 1, z + 1, side);
-					vertices[i++] = Util::vertex(x + 1, y, z + 1, side);
-					vertices[i++] = Util::vertex(x + 1, y + 1, z + 1, side);
+					vertices[i++] = vertex(x, y, z + 1, side);
+					vertices[i++] = vertex(x + 1, y, z + 1, side);
+					vertices[i++] = vertex(x, y + 1, z + 1, side);
+					vertices[i++] = vertex(x, y + 1, z + 1, side);
+					vertices[i++] = vertex(x + 1, y, z + 1, side);
+					vertices[i++] = vertex(x + 1, y + 1, z + 1, side);
 				}
 			}
 		}
@@ -219,7 +219,7 @@ namespace World
 		std::cout << std::to_string(i) << std::endl;
 
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
-		glBufferData(GL_ARRAY_BUFFER, i * sizeof(Util::vertex), vertices, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, i * sizeof(vertex), vertices, GL_STATIC_DRAW);
 		delete[] vertices;
 		changed = false;
 	}
@@ -261,7 +261,7 @@ namespace World
 	//This method is to be used with the possibility of the block being outside the chunk. 
 	//If we can absolutely guarantee that it's not, simply use voxel[x][y][z].
 	//It's almost certainly computationally cheaper.
-	Block::Block* Chunk::get_block(int x, int y, int z)
+	Block* Chunk::get_block(int x, int y, int z)
 	{
 		if(x < 0)
 		{

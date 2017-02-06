@@ -19,7 +19,7 @@
 #ifndef UTIL_SIMPLEX_H_
 #define UTIL_SIMPLEX_H_
 
-namespace Util
+namespace Game
 {
     /* 2D, 3D and 4D Simplex Noise functions return 'random' values in (-1, 1).
 

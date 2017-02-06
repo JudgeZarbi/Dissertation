@@ -4,7 +4,7 @@
 #include "SDL.h"
 #include <glm/glm.hpp>
 
-namespace Controls
+namespace Game
 {
 	void mouseMotion(SDL_MouseMotionEvent* ev, glm::vec3* angle);
 }

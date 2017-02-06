@@ -1,6 +1,6 @@
 #include "colourblock.h"
 
-namespace Block
+namespace Game
 {
 	ColourBlock cb = ColourBlock();
 

@@ -1,6 +1,6 @@
 #include "mouse.h"
 
-namespace Controls
+namespace Game
 {
 	void mouseMotion(SDL_MouseMotionEvent* ev, glm::vec3* angle) {
 		static const float mousespeed = 0.001;

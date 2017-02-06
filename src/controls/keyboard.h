@@ -3,7 +3,7 @@
 
 #include "SDL.h"
 
-namespace Controls
+namespace Game
 {	
 	void keyDown(SDL_KeyboardEvent* ev, unsigned short* keys);
 	void keyUp(SDL_KeyboardEvent* ev, unsigned short* keys);

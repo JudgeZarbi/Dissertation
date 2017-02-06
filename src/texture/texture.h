@@ -9,7 +9,7 @@
 
 #include "../util/global.h"
 
-namespace Texture
+namespace Game
 {
 	GLuint load_block_textures();
 }

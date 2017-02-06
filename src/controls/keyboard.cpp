@@ -1,6 +1,6 @@
 #include "keyboard.h"
 
-namespace Controls
+namespace Game
 {
 	void keyDown(SDL_KeyboardEvent* ev, unsigned short* keys)
 	{

@@ -9,7 +9,7 @@
 #include "../block/rcblock.h"
 #include "../block/colourblock.h"
 
-namespace World
+namespace Game
 {
 	const static int X = 16;
 	const static int Y = 256;
@@ -17,7 +17,7 @@ namespace World
 
 	struct Chunk
 	{
-		Block::Block* voxel[X][Y][Z];
+		Block* voxel[X][Y][Z];
 		GLuint vbo;
 		int elements;
 		bool init;
@@ -38,7 +38,7 @@ namespace World
 		void build_vertices();
 		bool is_visible(int x, int y, int z, int xadj, int yadj, int zadj);
 		void render(GLint coord);
-		Block::Block* get_block(int x, int y, int z);
+		Block* get_block(int x, int y, int z);
 
 	};
 

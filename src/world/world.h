@@ -7,7 +7,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-namespace World
+namespace Game
 {	
 	const static int CHUNKS_X = 25;
 	const static int CHUNKS_Y = 1;
@@ -16,12 +16,12 @@ namespace World
 	struct World
 	{
 		Chunk* chunks[CHUNKS_X][CHUNKS_Y][CHUNKS_Z];
-		Block::Block* colour;
+		Block* colour;
 
 		World();
 
 		void render(GLint coord, GLint mvp, glm::mat4 &pv);
-		Block::Block* get(int x, int y, int z) const;
+		Block* get(int x, int y, int z) const;
 	};
 }
 

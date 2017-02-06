@@ -3,7 +3,6 @@
  * This file is in the public domain.
  * Contributors: Sylvain Beucler
  */
-using namespace std;
 //Core libraries
 #include <GL/glew.h>
 #include "SDL.h"
@@ -26,14 +25,13 @@ using namespace std;
 #include "world/world.h"
 
 int screen_width=800, screen_height=600;
-int blocktypes = 9;
 GLuint program;
 GLuint texarray;
 GLint attribute_coord;
 GLint uniform_mvp;
 GLint uniform_texture;
 GLuint cursor_vbo;
-World::World* world;
+Game::World* world;
 
 int mx, my, mz;
 int face;
@@ -46,20 +44,20 @@ bool init_resources()
 	glGenVertexArrays(1, &VertexArrayID);
 	glBindVertexArray(VertexArrayID);
 
-	world = new World::World();
+	world = new Game::World();
 
-	texarray = Texture::load_block_textures();
+	texarray = Game::load_block_textures();
 
-	program = Util::create_program("shaders/vert.glsl", "shaders/frag.glsl");
+	program = Game::create_program("shaders/vert.glsl", "shaders/frag.glsl");
 
 	if (!program)
 	{
 		return false;
 	}
 	
-	attribute_coord = Util::get_attrib(program, "coord");
-	uniform_mvp = Util::get_uniform(program, "mvp");
-	uniform_texture = Util::get_uniform(program, "texarray");
+	attribute_coord = Game::get_attrib(program, "coord");
+	uniform_mvp = Game::get_uniform(program, "mvp");
+	uniform_texture = Game::get_uniform(program, "texarray");
 
 	if (attribute_coord == -1 || uniform_mvp == -1 || uniform_texture == -1)
 	{
@@ -81,7 +79,7 @@ bool init_resources()
 
 void render(SDL_Window* window)
 {
-	glm::mat4 view = glm::lookAt(Util::position, Util::position + Util::lookat, Util::up);
+	glm::mat4 view = glm::lookAt(Game::position, Game::position + Game::lookat, Game::up);
 	glm::mat4 projection = glm::perspective(45.0f, 1.0f*screen_width/screen_height, 0.1f, 1000.0f);
 
 	glm::mat4 mvp = projection * view;
@@ -96,14 +94,14 @@ void render(SDL_Window* window)
 	/* At which voxel are we looking? */
 	/* Very naive ray casting algorithm to find out which block we are looking at */
 
-	glm::vec3 testpos = Util::position;
-	glm::vec3 prevpos = Util::position;
+	glm::vec3 testpos = Game::position;
+	glm::vec3 prevpos = Game::position;
 
 	for(int i = 0; i < 100; i++) {
 		/* Advance from our currect position to the direction we are looking at, in small steps */
 
 		prevpos = testpos;
-		testpos += Util::lookat * 0.1f;
+		testpos += Game::lookat * 0.1f;
 
 		mx = floorf(testpos.x);
 		my = floorf(testpos.y);
@@ -228,7 +226,7 @@ void mainLoop(SDL_Window* window)
 
 	while (true) {
 		SDL_Event ev;
-		Util::timing();
+		Game::timing();
 		while (SDL_PollEvent(&ev))
 		{
 			if (ev.type == SDL_KEYDOWN)
@@ -239,17 +237,17 @@ void mainLoop(SDL_Window* window)
 				}
 				else
 				{
-					Controls::keyDown(&ev.key, &keys);					
+					Game::keyDown(&ev.key, &keys);					
 				}
 			}
 			else if (ev.type == SDL_KEYUP)
 			{
-				Controls::keyUp(&ev.key, &keys);
+				Game::keyUp(&ev.key, &keys);
 			}
 			else if (ev.type == SDL_MOUSEMOTION)
 			{
-				Controls::mouseMotion(&ev.motion, &Util::angle);
-				Util::update_vectors();
+				Game::mouseMotion(&ev.motion, &Game::angle);
+				Game::update_vectors();
 			}
 			else if (ev.type == SDL_MOUSEBUTTONDOWN)
 			{
@@ -271,9 +269,9 @@ void mainLoop(SDL_Window* window)
 		}
 		if (keys)
 		{
-			Util::movement(keys);			
+			Game::movement(keys);			
 		}
-//		std::cout << "(" << Util::position.x << ", " << Util::position.y << ", " << Util::position.z << ")" << std::endl;
+//		std::cout << "(" << position.x << ", " << position.y << ", " << position.z << ")" << std::endl;
 		render(window);
 	}
 }
@@ -286,7 +284,7 @@ int main() {
 		SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
 	if (window == NULL)
 	{
-		cerr << "Error: can't create window: " << SDL_GetError() << endl;
+		std::cerr << "Error: can't create window: " << SDL_GetError() << std::endl;
 		return EXIT_FAILURE;
 	}
 
@@ -295,7 +293,7 @@ int main() {
 	//SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 	if (SDL_GL_CreateContext(window) == NULL)
 	{
-		cerr << "Error: SDL_GL_CreateContext: " << SDL_GetError() << endl;
+		std::cerr << "Error: SDL_GL_CreateContext: " << SDL_GetError() << std::endl;
 		return EXIT_FAILURE;
 	}
 
@@ -303,12 +301,12 @@ int main() {
 	GLenum glew_status = glewInit();
 	if (glew_status != GLEW_OK)
 	{
-		cerr << "Error: glewInit: " << glewGetErrorString(glew_status) << endl;
+		std::cerr << "Error: glewInit: " << glewGetErrorString(glew_status) << std::endl;
 		return EXIT_FAILURE;
 	}
 	if (!GLEW_VERSION_3_3)
 	{
-		cerr << "Error: your graphic card does not support OpenGL 3.3" << endl;
+		std::cerr << "Error: your graphic card does not support OpenGL 3.3" << std::endl;
 		return EXIT_FAILURE;
 	}
 
@@ -320,9 +318,9 @@ int main() {
 		return EXIT_FAILURE;
 	}
 
-	Util::position = glm::vec3(0, 150, 0);
-	Util::angle = glm::vec3(0, -0.5, 0);
-	Util::update_vectors();
+	Game::position = glm::vec3(0, 150, 0);
+	Game::angle = glm::vec3(0, -0.5, 0);
+	Game::update_vectors();
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
