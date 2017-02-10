@@ -98,8 +98,6 @@ namespace Game
 		int cy = y / Y;
 		int cz = z / Z;
 
-		std::cout << cx << " " << cy << " " << cz << std::endl;
-
 		if(cx < 0 || cx >= CHUNKS_X || cy < 0 || cy >= CHUNKS_Y || cz < 0 || cz >= CHUNKS_Z)
 			return 0;
 
