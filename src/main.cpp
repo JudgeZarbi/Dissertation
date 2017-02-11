@@ -16,7 +16,6 @@
 #include <AL/alc.h>
 #include <opus/opusfile.h>
 #include <cstdio>
-#include <unistd.h>
 
 //Extra includes for my files.
 #include "controls/keyboard.h"
@@ -40,6 +39,7 @@ Game::World* world;
 
 int mx, my, mz;
 int face;
+bool target;
 
 //Audio stuff
 ALuint source;
@@ -266,79 +266,80 @@ void render(SDL_Window* window)
 
 		if(world->get(mx, my, mz))
 		{
-			break;			
+			target = true;	
+			break;		
 		}
 	}
 
-	/* Find out which face of the block we are looking at */
-
-	int px = floorf(prevpos.x);
-	int py = floorf(prevpos.y);
-	int pz = floorf(prevpos.z);
-
-	if(px > mx)
-		face = 0;
-	else if(px < mx)
-		face = 3;
-	else if(py > my)
-		face = 1;
-	else if(py < my)
-		face = 4;
-	else if(pz > mz)
-		face = 2;
-	else if(pz < mz)
-		face = 5;
-
-	/* If we are looking at air, move the cursor out of sight */
-
 	if(!world->get(mx, my, mz))
 	{
-		mx = my = mz = 99999;
+		target = false;
 	}
-
-
-	float bx = mx;
-	float by = my;
-	float bz = mz;
-
-	/* Render a box around the block we are pointing at */
-
-	float box[24][4] = {
-		{bx + 0, by + 0, bz + 0, 8},
-		{bx + 1, by + 0, bz + 0, 8},
-		{bx + 0, by + 1, bz + 0, 8},
-		{bx + 1, by + 1, bz + 0, 8},
-		{bx + 0, by + 0, bz + 1, 8},
-		{bx + 1, by + 0, bz + 1, 8},
-		{bx + 0, by + 1, bz + 1, 8},
-		{bx + 1, by + 1, bz + 1, 8},
-
-		{bx + 0, by + 0, bz + 0, 8},
-		{bx + 0, by + 1, bz + 0, 8},
-		{bx + 1, by + 0, bz + 0, 8},
-		{bx + 1, by + 1, bz + 0, 8},
-		{bx + 0, by + 0, bz + 1, 8},
-		{bx + 0, by + 1, bz + 1, 8},
-		{bx + 1, by + 0, bz + 1, 8},
-		{bx + 1, by + 1, bz + 1, 8},
-
-		{bx + 0, by + 0, bz + 0, 8},
-		{bx + 0, by + 0, bz + 1, 8},
-		{bx + 1, by + 0, bz + 0, 8},
-		{bx + 1, by + 0, bz + 1, 8},
-		{bx + 0, by + 1, bz + 0, 8},
-		{bx + 0, by + 1, bz + 1, 8},
-		{bx + 1, by + 1, bz + 0, 8},
-		{bx + 1, by + 1, bz + 1, 8},
-	};
 
 	glDisable(GL_POLYGON_OFFSET_FILL);
 	glDisable(GL_CULL_FACE);
-	glUniformMatrix4fv(uniform_mvp, 1, GL_FALSE, glm::value_ptr(mvp));
 	glBindBuffer(GL_ARRAY_BUFFER, cursor_vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(box), box, GL_DYNAMIC_DRAW);
-	glVertexAttribPointer(attribute_coord, 4, GL_FLOAT, GL_FALSE, 0, 0);
-	glDrawArrays(GL_LINES, 0, 24);
+	glUniformMatrix4fv(uniform_mvp, 1, GL_FALSE, glm::value_ptr(mvp));
+
+	if(target)
+	{
+		/* Find out which face of the block we are looking at */
+		int px = floorf(prevpos.x);
+		int py = floorf(prevpos.y);
+		int pz = floorf(prevpos.z);
+
+		if(px > mx)
+			face = 0;
+		else if(px < mx)
+			face = 3;
+		else if(py > my)
+			face = 1;
+		else if(py < my)
+			face = 4;
+		else if(pz > mz)
+			face = 2;
+		else if(pz < mz)
+			face = 5;
+
+		float bx = mx;
+		float by = my;
+		float bz = mz;
+
+		/* Render a box around the block we are pointing at */
+
+		float box[24][4] = {
+			{bx + 0, by + 0, bz + 0, 8},
+			{bx + 1, by + 0, bz + 0, 8},
+			{bx + 0, by + 1, bz + 0, 8},
+			{bx + 1, by + 1, bz + 0, 8},
+			{bx + 0, by + 0, bz + 1, 8},
+			{bx + 1, by + 0, bz + 1, 8},
+			{bx + 0, by + 1, bz + 1, 8},
+			{bx + 1, by + 1, bz + 1, 8},
+
+			{bx + 0, by + 0, bz + 0, 8},
+			{bx + 0, by + 1, bz + 0, 8},
+			{bx + 1, by + 0, bz + 0, 8},
+			{bx + 1, by + 1, bz + 0, 8},
+			{bx + 0, by + 0, bz + 1, 8},
+			{bx + 0, by + 1, bz + 1, 8},
+			{bx + 1, by + 0, bz + 1, 8},
+			{bx + 1, by + 1, bz + 1, 8},
+
+			{bx + 0, by + 0, bz + 0, 8},
+			{bx + 0, by + 0, bz + 1, 8},
+			{bx + 1, by + 0, bz + 0, 8},
+			{bx + 1, by + 0, bz + 1, 8},
+			{bx + 0, by + 1, bz + 0, 8},
+			{bx + 0, by + 1, bz + 1, 8},
+			{bx + 1, by + 1, bz + 0, 8},
+			{bx + 1, by + 1, bz + 1, 8},
+		};
+
+		glBufferData(GL_ARRAY_BUFFER, sizeof(box), box, GL_DYNAMIC_DRAW);
+		glVertexAttribPointer(attribute_coord, 4, GL_FLOAT, GL_FALSE, 0, 0);
+		glDrawArrays(GL_LINES, 0, 24);		
+	}
 
 	/* Draw a cross in the center of the screen */
 
@@ -409,9 +410,12 @@ void mainLoop(SDL_Window* window)
 			{
 				if (ev.button.button == SDL_BUTTON_RIGHT)
 				{
-					std::cout << "Right Click!" << std::endl;
-					world->chunks[1][0][1]->voxel[8][148][3]->rightClick();
-					world->chunks[1][0][1]->changed = true;
+					if(target)
+					{
+						world->get(mx, my, mz)->rightClick();
+						//Needs a world->get_chunk method
+						world->chunks[1][0][1]->changed = true;						
+					}
 				}
 			}
 			else if (ev.type == SDL_WINDOWEVENT && ev.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
