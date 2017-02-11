@@ -412,9 +412,11 @@ void mainLoop(SDL_Window* window)
 				{
 					if(target)
 					{
-						world->get(mx, my, mz)->rightClick();
-						//Needs a world->get_chunk method
-						world->chunks[1][0][1]->changed = true;						
+						if(world->get(mx, my, mz)->rightClick())
+						{
+							//Needs a world->get_chunk method
+							world->get_chunk(mx, my, mz)->changed = true;
+						}
 					}
 				}
 			}

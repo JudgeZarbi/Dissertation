@@ -93,10 +93,11 @@ namespace Game
 //		std::cout << rendered << std::endl;
 	}	
 
-	Block* World::get(int x, int y, int z) const {
-		int cx = x / X;
-		int cy = y / Y;
-		int cz = z / Z;
+	Block* World::get(int x, int y, int z) const
+	{
+		int cx = (x >= 0 ? x : x-15) / X;
+		int cy = (y >= 0 ? y : y-15) / Y;
+		int cz = (z >= 0 ? z : z-15) / Z;
 
 		if(cx < 0 || cx >= CHUNKS_X || cy < 0 || cy >= CHUNKS_Y || cz < 0 || cz >= CHUNKS_Z)
 			return 0;
@@ -104,4 +105,8 @@ namespace Game
 		return chunks[cx][cy][cz]->get_block(x & (X - 1), y & (Y - 1), z & (Z - 1));
 	}
 
+	Chunk* World::get_chunk(int x, int y, int z) const
+	{
+		return chunks[(x >= 0 ? x : x-15) / X][(y >= 0 ? y : y-15) / Y][(z >= 0 ? z : z-15) / Z];
+	}
 }
