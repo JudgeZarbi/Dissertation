@@ -7,3 +7,6 @@ voxel*
 #Other files
 links
 extra/
+
+#Can't include this yet
+audio/
