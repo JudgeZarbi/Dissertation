@@ -39,6 +39,7 @@ namespace Game
 		{
 			for(int z = 0; z < Z; z++)
 			{
+//				std::cout << (cx*16+x) << ", " << (cz*16+z) << std::endl;
 				double noise = scaled_octave_noise_3d(10, 0.25, 1, 0.4, 0.6, (cx*16+x)/128.0, (cz*16+z)/128.0, 0);
 				double max_y = noise * Y;
 				for (int y = 0; y < max_y - 5; y++)

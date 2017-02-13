@@ -4,21 +4,25 @@ namespace Game
 {
 	World::World()
 	{
+		int offset = CHUNKS_RANGE;
 		for(int x = 0; x < CHUNKS_X; x++)
 		{
 			for(int y = 0; y < CHUNKS_Y; y++)
 			{
 				for(int z = 0; z < CHUNKS_Z; z++)
 				{
-					chunks[x][y][z] = new Chunk(x, y, z);
+					chunks[x][y][z] = new Chunk(x - offset, y, z - offset);
 					chunks[x][y][z]->initialise();
-					if (x == 1 && z == 1)
+					std::cout << chunks[x][y][z]->cx << ", " << chunks[x][y][z]->cy << ", " << chunks[x][y][z]->cz << std::endl;
+					if (chunks[x][y][z]->cx == 1 && chunks[x][y][z]->cz == 1)
 					{
-						chunks[1][0][1]->voxel[8][148][3] = new ColourBlock();
+						chunks[x][y][z]->voxel[8][148][3] = new ColourBlock();
 					}
 				}
 			}
 		}
+
+		x_max = z_max = CHUNKS_RANGE;
 
 		for(int x = 0; x < CHUNKS_X; x++)
 		{
@@ -48,10 +52,9 @@ namespace Game
 					}
 					if(z < CHUNKS_Z - 1)
 					{
-						chunks[x][y][z]->b = chunks[x][y][z+1];				
+						chunks[x][y][z]->b = chunks[x][y][z+1];
 					}
 					chunks[x][y][z]->build_vertices();
-
 				}
 			}
 		}
@@ -66,11 +69,11 @@ namespace Game
 			{
 				for(int z = 0; z < CHUNKS_Z; z++)
 				{
-					glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(x * X, y * Y, z * Z));
+					glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(chunks[x][y][z]->cx * X, chunks[x][y][z]->cy * Y, chunks[x][y][z]->cz * Z));
 					glm::mat4 mvp = pv * model;
 
 					// Is this chunk on the screen?
-					glm::vec4 center = mvp * glm::vec4(X / 2, Y / 2, Z / 2, 1);
+					glm::vec4 center = mvp * glm::vec4(chunks[x][y][z]->cx / 2, chunks[x][y][z]->cx / 2, chunks[x][y][z]->cx / 2, 1);
 
 					center.x /= center.w;
 					center.y /= center.w;
@@ -95,9 +98,9 @@ namespace Game
 
 	Block* World::get(int x, int y, int z) const
 	{
-		int cx = (x >= 0 ? x : x-15) / X;
+		int cx = ((x >= 0 ? x : x-15) / X) % CHUNKS_X + CHUNKS_RANGE;
 		int cy = (y >= 0 ? y : y-15) / Y;
-		int cz = (z >= 0 ? z : z-15) / Z;
+		int cz = ((z >= 0 ? z : z-15) / Z) % CHUNKS_X + CHUNKS_RANGE;
 
 		if(cx < 0 || cx >= CHUNKS_X || cy < 0 || cy >= CHUNKS_Y || cz < 0 || cz >= CHUNKS_Z)
 			return 0;
@@ -107,6 +110,39 @@ namespace Game
 
 	Chunk* World::get_chunk(int x, int y, int z) const
 	{
-		return chunks[(x >= 0 ? x : x-15) / X][(y >= 0 ? y : y-15) / Y][(z >= 0 ? z : z-15) / Z];
+		return chunks[((x >= 0 ? x : x-15) / X) % CHUNKS_X + CHUNKS_RANGE][(y >= 0 ? y : y-15) / Y][((z >= 0 ? z : z-15) / Z) % CHUNKS_Z + CHUNKS_RANGE];
+	}
+
+	void World::move(int x, int z)
+	{
+		if (x < 0)
+		{
+			while (x++)
+			{
+				x_max++;
+
+			}
+		}
+		else if (x > 0)
+		{
+			while (x--)
+			{
+				
+			}
+		}
+		if (z < 0)
+		{
+			while (z++)
+			{
+				
+			}
+		}
+		else if (z > 0)
+		{
+			while (z--)
+			{
+				
+			}
+		}
 	}
 }

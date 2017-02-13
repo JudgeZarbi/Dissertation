@@ -59,7 +59,7 @@ int fill_buffer(ALuint buffer, OggOpusFile *file)
 
     int num_channels = op_channel_count(file, -1);
 
-    printf("Filling buffer %d...\n",buffer);
+//    printf("Filling buffer %d...\n",buffer);
 
     // We only support stereo and mono, set the openAL format based on channels.
     // opus always uses signed 16-bit integers, unless the _float functions are called.
@@ -414,7 +414,6 @@ void mainLoop(SDL_Window* window)
 					{
 						if(world->get(mx, my, mz)->rightClick())
 						{
-							//Needs a world->get_chunk method
 							world->get_chunk(mx, my, mz)->changed = true;
 						}
 					}
@@ -433,7 +432,7 @@ void mainLoop(SDL_Window* window)
 		{
 			Game::movement(keys);			
 		}
-//		std::cout << "(" << position.x << ", " << position.y << ", " << position.z << ")" << std::endl;
+//		std::cout << "(" << Game::position.x << ", " << Game::position.y << ", " << Game::position.z << ")" << std::endl;
 		render(window);
 		update_stream();
 	}
@@ -481,7 +480,7 @@ int main() {
 		return EXIT_FAILURE;
 	}
 
-	Game::position = glm::vec3(0, 150, 0);
+	Game::position = glm::vec3(1, 150, 1);
 	Game::angle = glm::vec3(0, -0.5, 0);
 	Game::update_vectors();
 

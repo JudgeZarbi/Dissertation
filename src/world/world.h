@@ -9,20 +9,24 @@
 
 namespace Game
 {	
-	const static int CHUNKS_X = 25;
+	const static int CHUNKS_RANGE = 5;
+	const static int CHUNKS_X = 2*CHUNKS_RANGE + 1;
 	const static int CHUNKS_Y = 1;
-	const static int CHUNKS_Z = 25;
+	const static int CHUNKS_Z = 2*CHUNKS_RANGE + 1;
 
 	struct World
 	{
 		Chunk* chunks[CHUNKS_X][CHUNKS_Y][CHUNKS_Z];
 		Block* colour;
+		int x_max;
+		int z_max;
 
 		World();
 
 		void render(GLint coord, GLint mvp, glm::mat4 &pv);
 		Block* get(int x, int y, int z) const;
 		Chunk* get_chunk(int x, int y, int z) const;
+		void move(int x, int z);
 	};
 }
 
