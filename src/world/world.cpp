@@ -23,6 +23,7 @@ namespace Game
 		}
 
 		x_max = z_max = CHUNKS_RANGE;
+		x_mpos = z_mpos = CHUNKS_X - 1;
 
 		for(int x = 0; x < CHUNKS_X; x++)
 		{
@@ -120,28 +121,57 @@ namespace Game
 			while (x++)
 			{
 				x_max++;
-
+				x_mpos = (x_mpos + 1) % 11;
+				for(int z = 0; z < CHUNKS_Z; z++)
+				{
+					int new_z = chunks[x_mpos][0][z]->cz;
+					delete chunks[x_mpos][0][z];
+					chunks[x_mpos][0][z] = new Chunk(x_max, 0, new_z);
+				}				
 			}
 		}
 		else if (x > 0)
 		{
 			while (x--)
 			{
-				
+				x_max--;
+				x_mpos = (x_mpos - 1 + 11) % 11;
+				for(int z = 0; z < CHUNKS_Z; z++)
+				{
+					int mark = x_mpos + 1 % 11;
+					int new_z = chunks[mark][0][z]->cz;
+					delete chunks[mark][0][z];
+					chunks[mark][0][z] = new Chunk(x_max - 10, 0, new_z);
+				}
 			}
 		}
 		if (z < 0)
 		{
 			while (z++)
 			{
-				
+				z_max++;
+				z_mpos = (z_mpos + 1) % 11;
+				for(int x = 0; x < CHUNKS_X; x++)
+				{
+					int new_x = chunks[x][0][z_mpos]->cx;
+					delete chunks[x][0][z_mpos];
+					chunks[x][0][z_mpos] = new Chunk(new_x, 0, z_max);
+				}
 			}
 		}
 		else if (z > 0)
 		{
 			while (z--)
 			{
-				
+				z_max--;
+				z_mpos = (z_mpos - 1 + 11) % 11;
+				for(int x = 0; x < CHUNKS_X; x++)
+				{
+					int mark = z_mpos + 1 % 11;
+					int new_x = chunks[x][0][mark]->cx;
+					delete chunks[x][0][mark];
+					chunks[x][0][mark] = new Chunk(new_x, 0, z_max - 10);
+				}
 			}
 		}
 	}

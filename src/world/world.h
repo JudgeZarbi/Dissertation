@@ -20,6 +20,8 @@ namespace Game
 		Block* colour;
 		int x_max;
 		int z_max;
+		int x_mpos;
+		int z_mpos;
 
 		World();
 
