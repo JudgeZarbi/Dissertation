@@ -99,9 +99,9 @@ namespace Game
 
 	Block* World::get(int x, int y, int z) const
 	{
-		int cx = ((x >= 0 ? x : x-15) / X) % CHUNKS_X + CHUNKS_RANGE;
+		int cx = (((x >= 0 ? x : x-15) / X) + CHUNKS_RANGE) % CHUNKS_X;
 		int cy = (y >= 0 ? y : y-15) / Y;
-		int cz = ((z >= 0 ? z : z-15) / Z) % CHUNKS_X + CHUNKS_RANGE;
+		int cz = (((z >= 0 ? z : z-15) / Z) + CHUNKS_RANGE) % CHUNKS_X;
 
 		if(cx < 0 || cx >= CHUNKS_X || cy < 0 || cy >= CHUNKS_Y || cz < 0 || cz >= CHUNKS_Z)
 			return 0;
@@ -111,14 +111,29 @@ namespace Game
 
 	Chunk* World::get_chunk(int x, int y, int z) const
 	{
-		return chunks[((x >= 0 ? x : x-15) / X) % CHUNKS_X + CHUNKS_RANGE][(y >= 0 ? y : y-15) / Y][((z >= 0 ? z : z-15) / Z) % CHUNKS_Z + CHUNKS_RANGE];
+		std::cout << (((x >= 0 ? x : x-15) / X) + CHUNKS_RANGE) % CHUNKS_X << " " << (y >= 0 ? y : y-15) / Y << " " << ((z >= 0 ? z : z-15) / Z) % CHUNKS_Z + CHUNKS_RANGE << std::endl;
+		return chunks[(((x >= 0 ? x : x-15) / X) + CHUNKS_RANGE) % CHUNKS_X][(y >= 0 ? y : y-15) / Y][(((z >= 0 ? z : z-15) / Z) + CHUNKS_RANGE) % CHUNKS_Z];
 	}
 
-	void World::move(int x, int z)
+	void World::move()
 	{
-		if (x < 0)
+		std::cout << floor(position.x) << ", " << floor(position.y) << ", " << floor(position.z) << std::endl;
+		Chunk* chunk = get_chunk(floor(position.x), floor(position.y), floor(position.z));
+		glm::ivec3 cur_chunk = glm::ivec3(chunk->cx, chunk->cy, chunk->cz);
+
+		int x = cur_chunk.x - x_old;
+		int z = cur_chunk.z - z_old;
+
+		std::cout << cur_chunk.x << " " << x_old << " " << x << std::endl;
+		std::cout << cur_chunk.z << " " << z_old << " " << z << std::endl;
+		std::cout << x_max << " " << z_max << std::endl;
+
+		x_old = cur_chunk.x;
+		z_old = cur_chunk.z;
+
+		if (x > 0)
 		{
-			while (x++)
+			while (x != 0)
 			{
 				x_max++;
 				x_mpos = (x_mpos + 1) % 11;
@@ -127,27 +142,33 @@ namespace Game
 					int new_z = chunks[x_mpos][0][z]->cz;
 					delete chunks[x_mpos][0][z];
 					chunks[x_mpos][0][z] = new Chunk(x_max, 0, new_z);
-				}				
+					chunks[x_mpos][0][z]->initialise();
+					chunks[x_mpos][0][z]->build_vertices();
+				}
+				x--;		
 			}
 		}
-		else if (x > 0)
+		else if (x < 0)
 		{
-			while (x--)
+			while (x != 0)
 			{
 				x_max--;
 				x_mpos = (x_mpos - 1 + 11) % 11;
 				for(int z = 0; z < CHUNKS_Z; z++)
 				{
-					int mark = x_mpos + 1 % 11;
+					int mark = (x_mpos + 1) % 11;
 					int new_z = chunks[mark][0][z]->cz;
 					delete chunks[mark][0][z];
 					chunks[mark][0][z] = new Chunk(x_max - 10, 0, new_z);
+					chunks[mark][0][z]->initialise();
+					chunks[mark][0][z]->build_vertices();
 				}
+				x++;
 			}
 		}
-		if (z < 0)
+		if (z > 0)
 		{
-			while (z++)
+			while (z != 0)
 			{
 				z_max++;
 				z_mpos = (z_mpos + 1) % 11;
@@ -156,23 +177,31 @@ namespace Game
 					int new_x = chunks[x][0][z_mpos]->cx;
 					delete chunks[x][0][z_mpos];
 					chunks[x][0][z_mpos] = new Chunk(new_x, 0, z_max);
+					chunks[x][0][z_mpos]->initialise();
+					chunks[x][0][z_mpos]->build_vertices();
 				}
+				z--;
 			}
 		}
-		else if (z > 0)
+		else if (z < 0)
 		{
-			while (z--)
+			while (z != 0)
 			{
 				z_max--;
 				z_mpos = (z_mpos - 1 + 11) % 11;
 				for(int x = 0; x < CHUNKS_X; x++)
 				{
-					int mark = z_mpos + 1 % 11;
+					int mark = (z_mpos + 1) % 11;
 					int new_x = chunks[x][0][mark]->cx;
 					delete chunks[x][0][mark];
 					chunks[x][0][mark] = new Chunk(new_x, 0, z_max - 10);
+					chunks[x][0][mark]->initialise();
+					chunks[x][0][mark]->build_vertices();
 				}
+				z++;
 			}
 		}
+
 	}
+
 }

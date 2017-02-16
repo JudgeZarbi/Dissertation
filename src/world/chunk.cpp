@@ -217,7 +217,7 @@ namespace Game
 		}
 
 		elements = i;
-		std::cout << std::to_string(i) << std::endl;
+//		std::cout << std::to_string(i) << std::endl;
 
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
 		glBufferData(GL_ARRAY_BUFFER, i * sizeof(vertex), vertices, GL_STATIC_DRAW);

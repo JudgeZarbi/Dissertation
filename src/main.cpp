@@ -433,6 +433,7 @@ void mainLoop(SDL_Window* window)
 			Game::movement(keys);			
 		}
 //		std::cout << "(" << Game::position.x << ", " << Game::position.y << ", " << Game::position.z << ")" << std::endl;
+		world->move();
 		render(window);
 		update_stream();
 	}

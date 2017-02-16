@@ -3,6 +3,7 @@
 
 #define GLM_FORCE_RADIANS
 #include "chunk.h"
+#include "../util/physics.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -22,13 +23,15 @@ namespace Game
 		int z_max;
 		int x_mpos;
 		int z_mpos;
+		int x_old = 0;
+		int z_old = 0;
 
 		World();
 
 		void render(GLint coord, GLint mvp, glm::mat4 &pv);
 		Block* get(int x, int y, int z) const;
 		Chunk* get_chunk(int x, int y, int z) const;
-		void move(int x, int z);
+		void move();
 	};
 }
 
