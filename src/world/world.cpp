@@ -128,9 +128,6 @@ namespace Game
 		std::cout << cur_chunk.z << " " << z_old << " " << z << std::endl;
 		std::cout << x_max << " " << z_max << std::endl;
 
-		x_old = cur_chunk.x;
-		z_old = cur_chunk.z;
-
 		if (x > 0)
 		{
 			while (x != 0)
@@ -201,6 +198,9 @@ namespace Game
 				z++;
 			}
 		}
+
+		x_old = cur_chunk.x;
+		z_old = cur_chunk.z;
 
 	}
 
