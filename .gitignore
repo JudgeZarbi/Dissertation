@@ -1,12 +1,12 @@
 #Compiled source files
-bin/
+/bin/
 
 #Program files
 voxel*
 
 #Other files
 links
-extra/
+/extra/
 
 #Can't include this yet
-audio/
+/audio
