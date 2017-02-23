@@ -12,6 +12,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/noise.hpp>
+#include <thread>
 
 //Extra includes for my files.
 #include "controls/keyboard.h"
@@ -224,11 +225,48 @@ void free_resources()
 	glDeleteTextures(1, &texarray);
 }
 
+void pause_loop(unsigned short keys)
+{
+	while(true)
+	{
+		SDL_Event ev;
+		Game::timing();
+		while (SDL_PollEvent(&ev))
+		{
+			if (ev.type == SDL_KEYDOWN)
+			{
+				if(ev.key.keysym.scancode == SDL_SCANCODE_P)
+				{
+					return;
+				}
+				else
+				{
+					Game::keyDown(&ev.key, &keys);
+				}
+			}
+			else if (ev.type == SDL_KEYUP)
+			{
+				Game::keyUp(&ev.key, &keys);
+			}
+			else if (ev.type == SDL_WINDOWEVENT && ev.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
+			{
+				onResize(ev.window.data1, ev.window.data2);
+			}
+			else if (ev.type == SDL_QUIT)
+			{
+				return;
+			}
+		}
+	}
+
+}
+
 void mainLoop(SDL_Window* window)
 {
 	static unsigned short keys;
 
 	as->play();
+	std::thread sound(&Game::AudioSystem::update_loop, as);
 
 	while (true) {
 		SDL_Event ev;
@@ -240,6 +278,10 @@ void mainLoop(SDL_Window* window)
 				if(ev.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
 				{
 					return;
+				}
+				else if(ev.key.keysym.scancode == SDL_SCANCODE_P)
+				{
+					pause_loop(keys);
 				}
 				else
 				{
@@ -282,7 +324,6 @@ void mainLoop(SDL_Window* window)
 			Game::movement(keys);			
 		}
 //		std::cout << "(" << Game::position.x << ", " << Game::position.y << ", " << Game::position.z << ")" << std::endl;
-		as->update();
 		world->move();
 		render(window);
 	}

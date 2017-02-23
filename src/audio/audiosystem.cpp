@@ -44,9 +44,12 @@ namespace Game
         sound->play();
     }
 
-    void AudioSystem::update()
+    void AudioSystem::update_loop()
     {
-        sound->update_stream();
+        while(true)
+        {
+            sound->update_stream();            
+        }
     }
 
 }

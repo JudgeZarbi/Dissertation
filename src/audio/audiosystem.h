@@ -19,7 +19,7 @@ namespace Game
 
 		static void initialise();
 		void play();
-		void update();
+		void update_loop();
 	};
 }
 
