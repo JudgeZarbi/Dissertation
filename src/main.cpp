@@ -265,8 +265,8 @@ void mainLoop(SDL_Window* window)
 {
 	static unsigned short keys;
 
-	as->play();
-	std::thread sound(&Game::AudioSystem::update_loop, as);
+	as->play_sound("FTF");
+	std::thread sound(&Game::AudioSystem::update_sounds, as);
 
 	while (true) {
 		SDL_Event ev;

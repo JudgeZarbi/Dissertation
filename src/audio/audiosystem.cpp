@@ -35,20 +35,20 @@ namespace Game
         alListener3f(AL_POSITION, 0.f,0.f,0.f);
         alListenerf(AL_GAIN,1.f);
 
-        sound = new Sound();
-
     }
 
-    void AudioSystem::play()
+    void AudioSystem::play_sound(std::string name)
     {
-        sound->play();
+        sounds.push_back(new Sound());
+        sounds[0]->play();
     }
 
-    void AudioSystem::update_loop()
+    void AudioSystem::update_sounds()
     {
         while(true)
         {
-            sound->update_stream();            
+            sounds[0]->update_stream();
+            usleep(50*1000);          
         }
     }
 

@@ -5,21 +5,27 @@
 #include <AL/alc.h>
 #include <cstdio>
 #include "sound/sound.h"
+#include <unordered_map>
+#include <vector>
+#include <unistd.h>
 
 namespace Game
 {
 	struct AudioSystem
 	{
-		ALCdevice *dev;
-		ALCcontext *ctx;
-		static AudioSystem* instance;
-		Sound* sound;
-
 		AudioSystem();
 
 		static void initialise();
-		void play();
-		void update_loop();
+		void play_sound(std::string name);
+		void update_sounds();
+
+		ALCdevice *dev;
+		ALCcontext *ctx;
+		static AudioSystem* instance;
+
+		std::vector<Sound*> sounds;
+
+		std::unordered_map<std::string, std::string> sound_map;
 	};
 }
 
