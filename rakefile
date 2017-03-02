@@ -3,7 +3,7 @@ require "rake/clean"
 CXX="g++"
 FLAGS="-Wall -Wextra -O2 -std=c++1y"
 DFLAGS="-Wall -Wextra -O2 -std=c++1y -ggdb"
-CXXFLAGS=`sdl2-config --cflags`.strip << ' ' << `pkg-config SDL2_image --cflags`.strip
+CXXFLAGS=`sdl2-config --cflags`.strip << ' ' << `pkg-config SDL2_image --cflags`.strip << ' -march=native'
 LDFLAGS=`sdl2-config --libs`.strip << ' ' << `pkg-config SDL2_image --libs`.strip << ' -lGLEW -lGL -L/usr/local/lib/x86_64-linux-gnu -lopenal -logg -lopusfile'
 
 SOURCE_FILES = Rake::FileList["src/**/*.cpp"]
