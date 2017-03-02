@@ -4,7 +4,10 @@ namespace Game
 {
 	World::World()
 	{
-		int offset = CHUNKS_RANGE;
+		memset(chunks, 0, sizeof(chunks));
+		x_max = z_max = CHUNKS_RANGE;
+		x_mpos = z_mpos = CHUNKS_X - 1;
+/*		int offset = CHUNKS_RANGE;
 		for(int x = 0; x < CHUNKS_X; x++)
 		{
 			for(int y = 0; y < CHUNKS_Y; y++)
@@ -22,8 +25,6 @@ namespace Game
 			}
 		}
 
-		x_max = z_max = CHUNKS_RANGE;
-		x_mpos = z_mpos = CHUNKS_X - 1;
 
 		for(int x = 0; x < CHUNKS_X; x++)
 		{
@@ -58,7 +59,7 @@ namespace Game
 					chunks[x][y][z]->build_vertices();
 				}
 			}
-		}
+		}*/
 	}
 
 	void World::render(GLint coord, GLint uniform, glm::mat4 &pv)
@@ -124,9 +125,9 @@ namespace Game
 		int x = cur_chunk.x - x_old;
 		int z = cur_chunk.z - z_old;
 
-		std::cout << cur_chunk.x << " " << x_old << " " << x << std::endl;
-		std::cout << cur_chunk.z << " " << z_old << " " << z << std::endl;
-		std::cout << x_max << " " << z_max << std::endl;
+		std::cout << "x: " <<cur_chunk.x << " " << x_old << " " << x << std::endl;
+		std::cout << "z: " << cur_chunk.z << " " << z_old << " " << z << std::endl;
+		std::cout << "Max: " << x_max << " " << z_max << std::endl;
 
 		if (x > 0)
 		{

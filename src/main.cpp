@@ -13,6 +13,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/noise.hpp>
 #include <thread>
+#include <unistd.h>
 
 //Extra includes for my files.
 #include "controls/keyboard.h"
@@ -25,6 +26,7 @@
 #include "world/chunk.h"
 #include "world/world.h"
 #include "audio/audiosystem.h"
+#include "threads/worldgenthread.h"
 
 int screen_width=800, screen_height=600;
 GLuint program;
@@ -35,6 +37,7 @@ GLint uniform_texture;
 GLuint cursor_vbo;
 Game::World* world;
 Game::AudioSystem* as;
+Game::WorldGenThread* wg_threads[4];
 
 int mx, my, mz;
 int face;
@@ -48,6 +51,15 @@ bool init_resources()
 	glBindVertexArray(VertexArrayID);
 
 	world = new Game::World();
+
+	wg_threads[0] = new Game::WorldGenThread(0, 0, Game::CHUNKS_RANGE, Game::CHUNKS_RANGE, world);
+	wg_threads[0]->create_thread();
+	wg_threads[1] = new Game::WorldGenThread(0, -Game::CHUNKS_RANGE, Game::CHUNKS_RANGE, -1, world);
+	wg_threads[1]->create_thread();
+	wg_threads[2] = new Game::WorldGenThread(-Game::CHUNKS_RANGE, -Game::CHUNKS_RANGE, -1, -1, world);
+	wg_threads[2]->create_thread();
+	wg_threads[3] = new Game::WorldGenThread(-Game::CHUNKS_RANGE, 0, -1, Game::CHUNKS_RANGE, world);
+	wg_threads[3]->create_thread();
 
 	texarray = Game::load_block_textures();
 
@@ -377,6 +389,15 @@ int main() {
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
+
+    for (int i = 0; i < 4; i++)
+    {
+    	while(wg_threads[i]->busy)
+    	{
+    		usleep(100*1000);
+    		std::cout << "Waiting!" << std::endl;
+    	}
+    }
 
     mainLoop(window);
 

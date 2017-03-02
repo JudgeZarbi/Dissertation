@@ -235,6 +235,7 @@ namespace Game
 		{
 			build_vertices();
 		}
+		std::cout << "vbo: " << vbo << std::endl;
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
 		glVertexAttribPointer(coord, 4, GL_UNSIGNED_BYTE, GL_FALSE, 0, 0);
 		glDrawArrays(GL_TRIANGLES, 0, elements);
