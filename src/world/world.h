@@ -10,7 +10,7 @@
 
 namespace Game
 {	
-	const static int CHUNKS_RANGE = 5;
+	const static int CHUNKS_RANGE = 10;
 	const static int CHUNKS_X = 2*CHUNKS_RANGE + 1;
 	const static int CHUNKS_Y = 1;
 	const static int CHUNKS_Z = 2*CHUNKS_RANGE + 1;

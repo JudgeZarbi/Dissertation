@@ -5,7 +5,7 @@
 
 namespace Game
 {
-	const static int MAX_TASKS = 50;
+	const static int MAX_TASKS = (CHUNKS_RANGE + 1) * (CHUNKS_RANGE + 2);
 
 	struct Task
 	{
@@ -28,8 +28,8 @@ namespace Game
 
 		Task tasks[MAX_TASKS];
 		std::thread* thread;
-		uint8_t cur = 49;
-		uint8_t end = 49;
+		uint8_t cur = MAX_TASKS - 1;
+		uint8_t end = MAX_TASKS - 1;
 		World* world;
 		bool busy = true;
 	};
