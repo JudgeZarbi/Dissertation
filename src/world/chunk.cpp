@@ -8,7 +8,6 @@ namespace Game
 		l = r = b = f = u = d = 0;
 		init = false;
 		changed = false;
-		glGenBuffers(1, &vbo);
 	}
 
 	//4D generation, no x listed, but is same as 3D
@@ -55,11 +54,12 @@ namespace Game
 			}
 		}
 		init = true;
+		changed = true;
 	}
 
 	void Chunk::build_vertices()
 	{
-		vertex* vertices = new vertex[X * Y * Z * 36];
+		vertices = new vertex[X * Y * Z * 36];
 		int i = 0;
 		// Cube left side
 		for(int x = X - 1; x >= 0; x--) 
@@ -218,27 +218,7 @@ namespace Game
 
 		elements = i;
 //		std::cout << std::to_string(i) << std::endl;
-
-		glBindBuffer(GL_ARRAY_BUFFER, vbo);
-		glBufferData(GL_ARRAY_BUFFER, i * sizeof(vertex), vertices, GL_STATIC_DRAW);
-		delete[] vertices;
 		changed = false;
-	}
-
-	void Chunk::render(GLint coord)
-	{
-		if(!elements)
-		{
-			return;
-		}
-		if(changed)
-		{
-			build_vertices();
-		}
-		std::cout << "vbo: " << vbo << std::endl;
-		glBindBuffer(GL_ARRAY_BUFFER, vbo);
-		glVertexAttribPointer(coord, 4, GL_UNSIGNED_BYTE, GL_FALSE, 0, 0);
-		glDrawArrays(GL_TRIANGLES, 0, elements);
 	}
 
 	bool Chunk::is_visible(int x, int y, int z, int xadj, int yadj, int zadj)
@@ -257,7 +237,6 @@ namespace Game
 
 
 		return true;
-
 	}
 
 	//This method is to be used with the possibility of the block being outside the chunk. 

@@ -31,13 +31,13 @@ namespace Game
 		int cx;
 		int cy;
 		int cz;
+		vertex* vertices;
 
 		Chunk(int cx, int cy, int cz);
 
 		void initialise();
 		void build_vertices();
 		bool is_visible(int x, int y, int z, int xadj, int yadj, int zadj);
-		void render(GLint coord);
 		Block* get_block(int x, int y, int z);
 
 	};

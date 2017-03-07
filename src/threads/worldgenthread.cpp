@@ -34,7 +34,6 @@ namespace Game
 //				}
 				world->chunks[tasks[cur].arr_x][0][tasks[cur].arr_z] = new Chunk(tasks[cur].x, 0, tasks[cur].z);
 				world->chunks[tasks[cur].arr_x][0][tasks[cur].arr_z]->initialise();
-				world->chunks[tasks[cur].arr_x][0][tasks[cur].arr_z]->build_vertices();
 			}
 			else
 			{

@@ -28,10 +28,10 @@ namespace Game
 
 		World();
 
-		void render(GLint coord, GLint mvp, glm::mat4 &pv);
 		Block* get(int x, int y, int z) const;
 		Chunk* get_chunk(int x, int y, int z) const;
 		void move();
+		void consistency();
 	};
 }
 
