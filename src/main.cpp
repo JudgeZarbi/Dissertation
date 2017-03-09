@@ -168,7 +168,7 @@ void mainLoop()
 			Game::movement(keys);			
 		}
 //		std::cout << "(" << Game::position.x << ", " << Game::position.y << ", " << Game::position.z << ")" << std::endl;
-		world->move();
+		world->move(wg_threads);
 		render();
 	}
 }
@@ -193,6 +193,11 @@ int main() {
     }
 
     world->consistency();
+
+    std::cout << wg_threads[0] << std::endl;
+    std::cout << wg_threads[1] << std::endl;
+    std::cout << wg_threads[2] << std::endl;
+    std::cout << wg_threads[3] << std::endl;
 
     mainLoop();
 

@@ -46,32 +46,32 @@ namespace Game
 		return chunks[(((x >= 0 ? x : x-15) / X) + CHUNKS_RANGE) % CHUNKS_X][(y >= 0 ? y : y-15) / Y][(((z >= 0 ? z : z-15) / Z) + CHUNKS_RANGE) % CHUNKS_Z];
 	}
 
-	void World::move()
+	void World::move(WorldGenThread** wg_threads)
 	{
-		std::cout << floor(position.x) << ", " << floor(position.y) << ", " << floor(position.z) << std::endl;
+//		std::cout << floor(position.x) << ", " << floor(position.y) << ", " << floor(position.z) << std::endl;
 		Chunk* chunk = get_chunk(floor(position.x), floor(position.y), floor(position.z));
 		glm::ivec3 cur_chunk = glm::ivec3(chunk->cx, chunk->cy, chunk->cz);
 
 		int x = cur_chunk.x - x_old;
 		int z = cur_chunk.z - z_old;
 
-		std::cout << "x: " <<cur_chunk.x << " " << x_old << " " << x << std::endl;
-		std::cout << "z: " << cur_chunk.z << " " << z_old << " " << z << std::endl;
-		std::cout << "Max: " << x_max << " " << z_max << std::endl;
+//		std::cout << "x: " <<cur_chunk.x << " " << x_old << " " << x << std::endl;
+//		std::cout << "z: " << cur_chunk.z << " " << z_old << " " << z << std::endl;
+//		std::cout << "Max: " << x_max << " " << z_max << std::endl;
 
 		if (x > 0)
 		{
 			while (x != 0)
 			{
 				x_max++;
-				x_mpos = (x_mpos + 1) % 11;
+				x_mpos = (x_mpos + 1) % CHUNKS_X;
 				for(int z = 0; z < CHUNKS_Z; z++)
 				{
 					int new_z = chunks[x_mpos][0][z]->cz;
-					delete chunks[x_mpos][0][z];
-					chunks[x_mpos][0][z] = new Chunk(x_max, 0, new_z);
-					chunks[x_mpos][0][z]->initialise();
-					chunks[x_mpos][0][z]->build_vertices();
+					std::cout << "Deleting " << chunks[x_mpos][0][z] << std::endl;
+					std::cout << "Deleted chunk at (" << chunks[x_mpos][0][z]->cx << ", " << chunks[x_mpos][0][z]->cz << ")" << std::endl;
+//					delete chunks[x_mpos][0][z];
+					wg_threads[(x_mpos + z) % 4]->add_task(x_max, new_z, x_mpos, z);
 				}
 				x--;		
 			}
@@ -81,15 +81,15 @@ namespace Game
 			while (x != 0)
 			{
 				x_max--;
-				x_mpos = (x_mpos - 1 + 11) % 11;
+				x_mpos = (x_mpos - 1 + CHUNKS_X) % CHUNKS_X;
 				for(int z = 0; z < CHUNKS_Z; z++)
 				{
-					int mark = (x_mpos + 1) % 11;
+					int mark = (x_mpos + 1) % CHUNKS_X;
 					int new_z = chunks[mark][0][z]->cz;
-					delete chunks[mark][0][z];
-					chunks[mark][0][z] = new Chunk(x_max - 10, 0, new_z);
-					chunks[mark][0][z]->initialise();
-					chunks[mark][0][z]->build_vertices();
+					std::cout << "Deleting " << chunks[mark][0][z] << std::endl;
+					std::cout << "Deleted chunk at (" << chunks[mark][0][z]->cx << ", " << chunks[mark][0][z]->cz << ")" << std::endl;
+//					delete chunks[mark][0][z];
+					wg_threads[(mark + z) % 4]->add_task(x_max - DIFF, new_z, mark, z);
 				}
 				x++;
 			}
@@ -99,14 +99,14 @@ namespace Game
 			while (z != 0)
 			{
 				z_max++;
-				z_mpos = (z_mpos + 1) % 11;
+				z_mpos = (z_mpos + 1) % CHUNKS_Z;
 				for(int x = 0; x < CHUNKS_X; x++)
 				{
 					int new_x = chunks[x][0][z_mpos]->cx;
-					delete chunks[x][0][z_mpos];
-					chunks[x][0][z_mpos] = new Chunk(new_x, 0, z_max);
-					chunks[x][0][z_mpos]->initialise();
-					chunks[x][0][z_mpos]->build_vertices();
+					std::cout << "Deleting " << chunks[x][0][z_mpos] << std::endl;
+					std::cout << "Deleted chunk at (" << chunks[x][0][z_mpos]->cx << ", " << chunks[x][0][z_mpos]->cz << ")" << std::endl;
+//					delete chunks[x][0][z_mpos];
+					wg_threads[(x + z_mpos) % 4]->add_task(new_x, z_max, x, z_mpos);
 				}
 				z--;
 			}
@@ -116,15 +116,15 @@ namespace Game
 			while (z != 0)
 			{
 				z_max--;
-				z_mpos = (z_mpos - 1 + 11) % 11;
+				z_mpos = (z_mpos - 1 + CHUNKS_Z) % CHUNKS_Z;
 				for(int x = 0; x < CHUNKS_X; x++)
 				{
-					int mark = (z_mpos + 1) % 11;
+					int mark = (z_mpos + 1) % CHUNKS_Z;
 					int new_x = chunks[x][0][mark]->cx;
-					delete chunks[x][0][mark];
-					chunks[x][0][mark] = new Chunk(new_x, 0, z_max - 10);
-					chunks[x][0][mark]->initialise();
-					chunks[x][0][mark]->build_vertices();
+					std::cout << "Deleting " << chunks[x][0][mark] << std::endl;
+					std::cout << "Deleted chunk at (" << chunks[x][0][mark]->cx << ", " << chunks[x][0][mark]->cz << ")" << std::endl;
+//					delete chunks[x][0][mark];
+					wg_threads[(x + mark) % 4]->add_task(new_x, z_max - DIFF, x, mark);
 				}
 				z++;
 			}

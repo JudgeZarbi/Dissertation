@@ -7,13 +7,14 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include "../threads/worldgenthread.h"
+#include "../util/global.h"
 
 namespace Game
 {	
-	const static int CHUNKS_RANGE = 10;
-	const static int CHUNKS_X = 2*CHUNKS_RANGE + 1;
-	const static int CHUNKS_Y = 1;
-	const static int CHUNKS_Z = 2*CHUNKS_RANGE + 1;
+
+	//hopefully temp
+	struct WorldGenThread;
 
 	struct World
 	{
@@ -30,7 +31,7 @@ namespace Game
 
 		Block* get(int x, int y, int z) const;
 		Chunk* get_chunk(int x, int y, int z) const;
-		void move();
+		void move(WorldGenThread** wg_threads);
 		void consistency();
 	};
 }

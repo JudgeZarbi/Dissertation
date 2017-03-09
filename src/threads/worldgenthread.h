@@ -1,11 +1,16 @@
+#ifndef _THREADS_WORLDGENTHREAD_H
+#define _THREADS_WORLDGENTHREAD_H
+
 #include <thread>
 #include <vector>
+#include <string>
 #include <unistd.h>
 #include "../world/world.h"
+#include "../util/global.h"
 
 namespace Game
 {
-	const static int MAX_TASKS = (CHUNKS_RANGE + 1) * (CHUNKS_RANGE + 2);
+	struct World;
 
 	struct Task
 	{
@@ -34,3 +39,5 @@ namespace Game
 		bool busy = true;
 	};
 }
+
+#endif

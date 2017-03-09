@@ -34,11 +34,14 @@ namespace Game
 //				}
 				world->chunks[tasks[cur].arr_x][0][tasks[cur].arr_z] = new Chunk(tasks[cur].x, 0, tasks[cur].z);
 				world->chunks[tasks[cur].arr_x][0][tasks[cur].arr_z]->initialise();
+				std::cout << std::to_string(cur) << " " << std::to_string(end) << std::endl;
+				std::cout << "Created chunk at (" << tasks[cur].x << ", " << tasks[cur].z << ")" << std::endl;
+				std::cout << "Created chunk at array (" << tasks[cur].arr_x << ", " << tasks[cur].arr_z << ")" << std::endl;				
 			}
 			else
 			{
-				usleep(500*1000);
 				busy = false;
+				usleep(500*1000);
 			}
 		}
 	}
@@ -46,14 +49,16 @@ namespace Game
 	bool WorldGenThread::add_task(int x, int z, int arr_x, int arr_z)
 	{
 		//No space left in the queue if this is true.
-		if(end == (cur + 1) % MAX_TASKS)
+		if(end == (cur - 1 + MAX_TASKS) % MAX_TASKS)
 		{
+			std::cout << "No space!" << std::endl;
 			return false;
 		}
 		else
 		{
 			tasks[end + 1 % MAX_TASKS] = Task(x, z, arr_x, arr_z);
 			end = end + 1 % MAX_TASKS;
+			std::cout << "Task added!" << std::endl;
 			return true;
 		}
 	}

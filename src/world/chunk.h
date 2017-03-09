@@ -18,7 +18,7 @@ namespace Game
 	struct Chunk
 	{
 		Block* voxel[X][Y][Z];
-		GLuint vbo;
+		GLuint vbo = 0;
 		int elements;
 		bool init;
 		bool changed;

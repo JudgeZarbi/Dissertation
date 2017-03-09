@@ -90,12 +90,20 @@ namespace Game
 		glEnable(GL_POLYGON_OFFSET_FILL);
 
 		int rendered = 0;
-		for(int x = 0; x < CHUNKS_X; x++)
+		int cur_x = floor(position.x);
+		int cur_z = floor(position.z);
+		int cur_x_chunk = (((cur_x >= 0 ? cur_x : cur_x - 15) / X) + CHUNKS_RANGE) % CHUNKS_X;
+		int cur_z_chunk = (((cur_z >= 0 ? cur_z : cur_z - 15) / Z) + CHUNKS_RANGE) % CHUNKS_Z;
+
+		std::cout << "In renderer loop1!" << std::endl;
+
+		for(int x = ((cur_x_chunk - FRAME_RANGE) >= 0 ? cur_x_chunk - FRAME_RANGE : (cur_x_chunk - FRAME_RANGE + CHUNKS_X)); x != ((cur_x_chunk + FRAME_RANGE + 1) % CHUNKS_X); x = ((x + 1) % CHUNKS_X))
 		{
 			for(int y = 0; y < CHUNKS_Y; y++)
 			{
-				for(int z = 0; z < CHUNKS_Z; z++)
+				for(int z = ((cur_z_chunk - FRAME_RANGE) >= 0 ? cur_z_chunk - FRAME_RANGE : (cur_z_chunk - FRAME_RANGE + CHUNKS_Z)); z != ((cur_z_chunk + FRAME_RANGE + 1) % CHUNKS_Z); z = ((z + 1) % CHUNKS_Z))
 				{
+					std::cout << "In renderer loop2!" << std::endl;
 					Chunk* chunk = world->chunks[x][y][z];
 					if (!chunk->vbo)
 					{
@@ -120,7 +128,6 @@ namespace Game
 					// If it is outside the screen, don't bother drawing it
 					if(fabsf(center.x) > 1 + fabsf(Y * 2 / center.w) || fabsf(center.y) > 1 + fabsf(Y * 2 / center.w))
 					{
-						std::cout << "lolnooo" << std::endl;
 						continue;
 					}
 
@@ -131,8 +138,6 @@ namespace Game
 				}
 			}
 		}
-		std::cout << rendered << std::endl;
-
 		
 		/* At which voxel are we looking? */
 		/* Very naive ray casting algorithm to find out which block we are looking at */
