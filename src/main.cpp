@@ -28,10 +28,12 @@
 #include "audio/audiosystem.h"
 #include "threads/worldgenthread.h"
 #include "render/renderer.h"
+#include "threads/audiothread.h"
 
 Game::World* world;
 Game::AudioSystem* as;
 Game::WorldGenThread* wg_threads[4];
+Game::AudioThread* a_thread;
 Game::Renderer* r;
 
 int mx, my, mz;
@@ -42,13 +44,13 @@ bool init_resources()
 {
 	world = new Game::World();
 
-	wg_threads[0] = new Game::WorldGenThread(0, 0, Game::CHUNKS_RANGE, Game::CHUNKS_RANGE, world);
+	wg_threads[0] = new Game::WorldGenThread(0, 0, Game::CHUNKS_RANGE, Game::CHUNKS_RANGE, world, 0);
 	wg_threads[0]->create_thread();
-	wg_threads[1] = new Game::WorldGenThread(0, -Game::CHUNKS_RANGE, Game::CHUNKS_RANGE, -1, world);
+	wg_threads[1] = new Game::WorldGenThread(0, -Game::CHUNKS_RANGE, Game::CHUNKS_RANGE, -1, world, 1);
 	wg_threads[1]->create_thread();
-	wg_threads[2] = new Game::WorldGenThread(-Game::CHUNKS_RANGE, -Game::CHUNKS_RANGE, -1, -1, world);
+	wg_threads[2] = new Game::WorldGenThread(-Game::CHUNKS_RANGE, -Game::CHUNKS_RANGE, -1, -1, world, 2);
 	wg_threads[2]->create_thread();
-	wg_threads[3] = new Game::WorldGenThread(-Game::CHUNKS_RANGE, 0, -1, Game::CHUNKS_RANGE, world);
+	wg_threads[3] = new Game::WorldGenThread(-Game::CHUNKS_RANGE, 0, -1, Game::CHUNKS_RANGE, world, 3);
 	wg_threads[3]->create_thread();
 
 	Game::AudioSystem::initialise();
@@ -102,15 +104,15 @@ void pause_loop(unsigned short keys)
 			}
 		}
 	}
-
 }
 
 void mainLoop()
 {
 	static unsigned short keys;
 
+	a_thread = new Game::AudioThread(as);
 	as->play_sound("FTF");
-	std::thread sound(&Game::AudioSystem::update_sounds, as);
+	a_thread->create_thread();
 
 	while (true) {
 		SDL_Event ev;

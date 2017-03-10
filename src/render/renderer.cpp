@@ -95,15 +95,12 @@ namespace Game
 		int cur_x_chunk = (((cur_x >= 0 ? cur_x : cur_x - 15) / X) + CHUNKS_RANGE) % CHUNKS_X;
 		int cur_z_chunk = (((cur_z >= 0 ? cur_z : cur_z - 15) / Z) + CHUNKS_RANGE) % CHUNKS_Z;
 
-		std::cout << "In renderer loop1!" << std::endl;
-
 		for(int x = ((cur_x_chunk - FRAME_RANGE) >= 0 ? cur_x_chunk - FRAME_RANGE : (cur_x_chunk - FRAME_RANGE + CHUNKS_X)); x != ((cur_x_chunk + FRAME_RANGE + 1) % CHUNKS_X); x = ((x + 1) % CHUNKS_X))
 		{
 			for(int y = 0; y < CHUNKS_Y; y++)
 			{
 				for(int z = ((cur_z_chunk - FRAME_RANGE) >= 0 ? cur_z_chunk - FRAME_RANGE : (cur_z_chunk - FRAME_RANGE + CHUNKS_Z)); z != ((cur_z_chunk + FRAME_RANGE + 1) % CHUNKS_Z); z = ((z + 1) % CHUNKS_Z))
 				{
-					std::cout << "In renderer loop2!" << std::endl;
 					Chunk* chunk = world->chunks[x][y][z];
 					if (!chunk->vbo)
 					{
