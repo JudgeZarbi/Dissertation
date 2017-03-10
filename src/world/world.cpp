@@ -30,9 +30,9 @@ namespace Game
 
 	Block* World::get(int x, int y, int z) const
 	{
-		int cx = (((x >= 0 ? x : x-15) / X) + CHUNKS_RANGE) % CHUNKS_X;
+		int cx = (((((x >= 0 ? x : x-15) / X) + CHUNKS_RANGE) % CHUNKS_X) + CHUNKS_X) % CHUNKS_X;
 		int cy = (y >= 0 ? y : y-15) / Y;
-		int cz = (((z >= 0 ? z : z-15) / Z) + CHUNKS_RANGE) % CHUNKS_Z;
+		int cz = (((((z >= 0 ? z : z-15) / Z) + CHUNKS_RANGE) % CHUNKS_Z) + CHUNKS_Z) % CHUNKS_Z;
 
 		if(cx < 0 || cx >= CHUNKS_X || cy < 0 || cy >= CHUNKS_Y || cz < 0 || cz >= CHUNKS_Z)
 			return 0;
@@ -42,8 +42,8 @@ namespace Game
 
 	Chunk* World::get_chunk(int x, int y, int z) const
 	{
-		std::cout << (((x >= 0 ? x : x-15) / X) + CHUNKS_RANGE) % CHUNKS_X << " " << (y >= 0 ? y : y-15) / Y << " " << ((z >= 0 ? z : z-15) / Z) % CHUNKS_Z + CHUNKS_RANGE << std::endl;
-		return chunks[(((x >= 0 ? x : x-15) / X) + CHUNKS_RANGE) % CHUNKS_X][(y >= 0 ? y : y-15) / Y][(((z >= 0 ? z : z-15) / Z) + CHUNKS_RANGE) % CHUNKS_Z];
+		std::cout << (((((x >= 0 ? x : x-15) / X) + CHUNKS_RANGE) % CHUNKS_X) + CHUNKS_X) % CHUNKS_X << " " << (((((z >= 0 ? z : z-15) / Z) + CHUNKS_RANGE) % CHUNKS_Z) + CHUNKS_Z) % CHUNKS_Z << std::endl;
+		return chunks[(((((x >= 0 ? x : x-15) / X) + CHUNKS_RANGE) % CHUNKS_X) + CHUNKS_X) % CHUNKS_X][0][(((((z >= 0 ? z : z-15) / Z) + CHUNKS_RANGE) % CHUNKS_Z) + CHUNKS_Z) % CHUNKS_Z];
 	}
 
 	void World::move(WorldGenThread** wg_threads)
