@@ -101,7 +101,6 @@ namespace Game
 			{
 				for(int z = ((cur_z_chunk - FRAME_RANGE) >= 0 ? cur_z_chunk - FRAME_RANGE : (cur_z_chunk - FRAME_RANGE + CHUNKS_Z)); z != ((cur_z_chunk + FRAME_RANGE + 1) % CHUNKS_Z); z = ((z + 1) % CHUNKS_Z))
 				{
-					std::cout << "Render loop!" << std::endl;
 					Chunk* chunk = world->chunks[x][y][z];
 					if (!chunk->vbo)
 					{

@@ -42,14 +42,16 @@ namespace Game
 
 	Chunk* World::get_chunk(int x, int y, int z) const
 	{
-		std::cout << (((((x >= 0 ? x : x-15) / X) + CHUNKS_RANGE) % CHUNKS_X) + CHUNKS_X) % CHUNKS_X << " " << (((((z >= 0 ? z : z-15) / Z) + CHUNKS_RANGE) % CHUNKS_Z) + CHUNKS_Z) % CHUNKS_Z << std::endl;
+		std::cout << ((x >= 0 ? x : x-15) / X) << " " << ((z >= 0 ? z : z-15) / Z) << std::endl;
+//		std::cout << (((((x >= 0 ? x : x-15) / X) + CHUNKS_RANGE) % CHUNKS_X) + CHUNKS_X) % CHUNKS_X << " " << (((((z >= 0 ? z : z-15) / Z) + CHUNKS_RANGE) % CHUNKS_Z) + CHUNKS_Z) % CHUNKS_Z << std::endl;
+//		std::cout << chunks[15][0][6]->cx << chunks[15][0][6]->cz << std::endl;
 		return chunks[(((((x >= 0 ? x : x-15) / X) + CHUNKS_RANGE) % CHUNKS_X) + CHUNKS_X) % CHUNKS_X][0][(((((z >= 0 ? z : z-15) / Z) + CHUNKS_RANGE) % CHUNKS_Z) + CHUNKS_Z) % CHUNKS_Z];
 	}
 
 	void World::move(WorldGenThread** wg_threads)
 	{
-		std::cout << position.x << ", " << position.y << ", " << position.z << std::endl;
-		std::cout << floor(position.x) << ", " << floor(position.y) << ", " << floor(position.z) << std::endl;
+//		std::cout << position.x << ", " << position.y << ", " << position.z << std::endl;
+//		std::cout << floor(position.x) << ", " << floor(position.y) << ", " << floor(position.z) << std::endl;
 		Chunk* chunk = get_chunk(floor(position.x), floor(position.y), floor(position.z));
 		glm::ivec3 cur_chunk = glm::ivec3(chunk->cx, chunk->cy, chunk->cz);
 
@@ -58,7 +60,6 @@ namespace Game
 
 //		std::cout << "x: " <<cur_chunk.x << " " << x_old << " " << x << std::endl;
 //		std::cout << "z: " << cur_chunk.z << " " << z_old << " " << z << std::endl;
-//		std::cout << "Max: " << x_max << " " << z_max << std::endl;
 
 		if (x > 0)
 		{
@@ -69,8 +70,8 @@ namespace Game
 				for(int z = 0; z < CHUNKS_Z; z++)
 				{
 					int new_z = chunks[x_mpos][0][z]->cz;
-					std::cout << "Deleting " << chunks[x_mpos][0][z] << std::endl;
-					std::cout << "Deleted chunk at (" << chunks[x_mpos][0][z]->cx << ", " << chunks[x_mpos][0][z]->cz << ")" << std::endl;
+//					std::cout << "Deleting " << chunks[x_mpos][0][z] << std::endl;
+//					std::cout << "Deleted chunk at (" << chunks[x_mpos][0][z]->cx << ", " << chunks[x_mpos][0][z]->cz << ")" << std::endl;
 //					delete chunks[x_mpos][0][z];
 					wg_threads[(x_mpos + z) % 4]->add_task(x_max, new_z, x_mpos, z);
 				}
@@ -87,8 +88,8 @@ namespace Game
 				{
 					int mark = (x_mpos + 1) % CHUNKS_X;
 					int new_z = chunks[mark][0][z]->cz;
-					std::cout << "Deleting " << chunks[mark][0][z] << std::endl;
-					std::cout << "Deleted chunk at (" << chunks[mark][0][z]->cx << ", " << chunks[mark][0][z]->cz << ")" << std::endl;
+//					std::cout << "Deleting " << chunks[mark][0][z] << std::endl;
+//					std::cout << "Deleted chunk at (" << chunks[mark][0][z]->cx << ", " << chunks[mark][0][z]->cz << ")" << std::endl;
 //					delete chunks[mark][0][z];
 					wg_threads[(mark + z) % 4]->add_task(x_max - DIFF, new_z, mark, z);
 				}
@@ -104,8 +105,8 @@ namespace Game
 				for(int x = 0; x < CHUNKS_X; x++)
 				{
 					int new_x = chunks[x][0][z_mpos]->cx;
-					std::cout << "Deleting " << chunks[x][0][z_mpos] << std::endl;
-					std::cout << "Deleted chunk at (" << chunks[x][0][z_mpos]->cx << ", " << chunks[x][0][z_mpos]->cz << ")" << std::endl;
+//					std::cout << "Deleting " << chunks[x][0][z_mpos] << std::endl;
+//					std::cout << "Deleted chunk at (" << chunks[x][0][z_mpos]->cx << ", " << chunks[x][0][z_mpos]->cz << ")" << std::endl;
 //					delete chunks[x][0][z_mpos];
 					wg_threads[(x + z_mpos) % 4]->add_task(new_x, z_max, x, z_mpos);
 				}
@@ -122,8 +123,8 @@ namespace Game
 				{
 					int mark = (z_mpos + 1) % CHUNKS_Z;
 					int new_x = chunks[x][0][mark]->cx;
-					std::cout << "Deleting " << chunks[x][0][mark] << std::endl;
-					std::cout << "Deleted chunk at (" << chunks[x][0][mark]->cx << ", " << chunks[x][0][mark]->cz << ")" << std::endl;
+//					std::cout << "Deleting " << chunks[x][0][mark] << std::endl;
+//					std::cout << "Deleted chunk at (" << chunks[x][0][mark]->cx << ", " << chunks[x][0][mark]->cz << ")" << std::endl;
 //					delete chunks[x][0][mark];
 					wg_threads[(x + mark) % 4]->add_task(new_x, z_max - DIFF, x, mark);
 				}

@@ -4,10 +4,10 @@ namespace Game
 {
 	Chunk::Chunk(int cx, int cy, int cz): cx(cx), cy(cy), cz(cz)
 	{
-		memset(voxel, 0, sizeof(voxel));
 		l = r = b = f = u = d = 0;
 		init = false;
 		changed = false;
+//		std::cout << "Chunk ctor: " << cx << " " << cy << " " << cz << std::endl;
 	}
 
 	//4D generation, no x listed, but is same as 3D
@@ -34,6 +34,7 @@ namespace Game
 
 	void Chunk::initialise()
 	{
+		memset(voxel, 0, sizeof(voxel));
 		for(int x = 0; x < X; x++)
 		{
 			for(int z = 0; z < Z; z++)

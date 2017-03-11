@@ -28,15 +28,23 @@ namespace Game
 			if(cur != end)
 			{
 				cur = (cur + 1) % MAX_TASKS;
-//				if(world->chunks[tasks[cur].arr_x][0][tasks[cur].arr_z] != 0)
-//				{
+				if(world->chunks[tasks[cur].arr_x][0][tasks[cur].arr_z] != 0)
+				{
 //					delete world->chunks[tasks[cur].arr_x][0][tasks[cur].arr_z];
-//				}
-				world->chunks[tasks[cur].arr_x][0][tasks[cur].arr_z] = new Chunk(tasks[cur].x, 0, tasks[cur].z);
-				world->chunks[tasks[cur].arr_x][0][tasks[cur].arr_z]->initialise();
-				std::cout << id << ": " << std::to_string(cur) << " " << std::to_string(end) << std::endl;
+					world->chunks[tasks[cur].arr_x][0][tasks[cur].arr_z]->cx = tasks[cur].x;
+					world->chunks[tasks[cur].arr_x][0][tasks[cur].arr_z]->cz = tasks[cur].z;
+					world->chunks[tasks[cur].arr_x][0][tasks[cur].arr_z]->initialise();
+					if (tasks[cur].arr_x == 15 && tasks[cur].arr_z == 6)
+					{
+						std::cout << world->chunks[15][0][6]->cx << world->chunks[15][0][6]->cz << std::endl;
+					}
+				}
+				else
+				{				
+					world->chunks[tasks[cur].arr_x][0][tasks[cur].arr_z] = new Chunk(tasks[cur].x, 0, tasks[cur].z);
+					world->chunks[tasks[cur].arr_x][0][tasks[cur].arr_z]->initialise();
+				}
 				std::cout << "Created chunk at (" << tasks[cur].x << ", " << tasks[cur].z << ")" << std::endl;
-				std::cout << "Created chunk at array (" << tasks[cur].arr_x << ", " << tasks[cur].arr_z << ")" << std::endl;				
 			}
 			else
 			{
@@ -58,7 +66,15 @@ namespace Game
 		{
 			tasks[(end + 1) % MAX_TASKS] = Task(x, z, arr_x, arr_z);
 			end = (end + 1) % MAX_TASKS;
-			std::cout << "Task added: " << id << " - " << std::to_string(end) << " " << std::to_string(x) << " " << std::to_string(z) << std::endl;
+			if (arr_x == 15 && arr_z == 6)
+			{
+				std::cout << "Target marked for destruction!" << " " << x << " " << z << std::endl;
+			}
+			if (arr_x == 16 && arr_z == 6)
+			{
+				std::cout << "Target adjacent!" << " " << x << " " << z << std::endl;
+			}
+//			std::cout << "Task added: " << std::to_string(x) << " " << std::to_string(z) << std::endl;
 			return true;
 		}
 	}
