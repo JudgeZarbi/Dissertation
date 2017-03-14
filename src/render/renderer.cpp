@@ -118,7 +118,7 @@ namespace Game
 					// If it is behind the camera, don't bother drawing it
 					if(center.z < -Y / 2)
 					{
-						std::cout << "lolno" << std::endl;
+//						std::cout << "lolno" << std::endl;
 						continue;
 					}
 

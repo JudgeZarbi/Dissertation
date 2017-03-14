@@ -33,6 +33,9 @@ namespace Game
 		Chunk* get_chunk(int x, int y, int z) const;
 		void move(WorldGenThread** wg_threads);
 		void consistency();
+
+		void print(std::ostream& out);
+
 	};
 }
 

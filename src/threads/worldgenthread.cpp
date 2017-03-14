@@ -36,7 +36,7 @@ namespace Game
 					world->chunks[tasks[cur].arr_x][0][tasks[cur].arr_z]->initialise();
 					if (tasks[cur].arr_x == 15 && tasks[cur].arr_z == 6)
 					{
-						std::cout << world->chunks[15][0][6]->cx << world->chunks[15][0][6]->cz << std::endl;
+//						std::cout << world->chunks[15][0][6]->cx << world->chunks[15][0][6]->cz << std::endl;
 					}
 				}
 				else
@@ -44,7 +44,7 @@ namespace Game
 					world->chunks[tasks[cur].arr_x][0][tasks[cur].arr_z] = new Chunk(tasks[cur].x, 0, tasks[cur].z);
 					world->chunks[tasks[cur].arr_x][0][tasks[cur].arr_z]->initialise();
 				}
-				std::cout << "Created chunk at (" << tasks[cur].x << ", " << tasks[cur].z << ")" << std::endl;
+				std::cout << "Created chunk (" << tasks[cur].x << ", " << tasks[cur].z << ") at array (" << tasks[cur].arr_x << ", " << tasks[cur].arr_z << ")" << std::endl;
 			}
 			else
 			{
@@ -68,11 +68,11 @@ namespace Game
 			end = (end + 1) % MAX_TASKS;
 			if (arr_x == 15 && arr_z == 6)
 			{
-				std::cout << "Target marked for destruction!" << " " << x << " " << z << std::endl;
+//				std::cout << "Target marked for destruction!" << " " << x << " " << z << std::endl;
 			}
 			if (arr_x == 16 && arr_z == 6)
 			{
-				std::cout << "Target adjacent!" << " " << x << " " << z << std::endl;
+//				std::cout << "Target adjacent!" << " " << x << " " << z << std::endl;
 			}
 //			std::cout << "Task added: " << std::to_string(x) << " " << std::to_string(z) << std::endl;
 			return true;

@@ -172,6 +172,7 @@ void mainLoop()
 //		std::cout << "(" << Game::position.x << ", " << Game::position.y << ", " << Game::position.z << ")" << std::endl;
 		world->move(wg_threads);
 		render();
+		world->print(std::cout);
 	}
 }
 

@@ -42,7 +42,7 @@ namespace Game
 
 	Chunk* World::get_chunk(int x, int y, int z) const
 	{
-		std::cout << ((x >= 0 ? x : x-15) / X) << " " << ((z >= 0 ? z : z-15) / Z) << std::endl;
+//		std::cout << ((x >= 0 ? x : x-15) / X) << " " << ((z >= 0 ? z : z-15) / Z) << std::endl;
 //		std::cout << (((((x >= 0 ? x : x-15) / X) + CHUNKS_RANGE) % CHUNKS_X) + CHUNKS_X) % CHUNKS_X << " " << (((((z >= 0 ? z : z-15) / Z) + CHUNKS_RANGE) % CHUNKS_Z) + CHUNKS_Z) % CHUNKS_Z << std::endl;
 //		std::cout << chunks[15][0][6]->cx << chunks[15][0][6]->cz << std::endl;
 		return chunks[(((((x >= 0 ? x : x-15) / X) + CHUNKS_RANGE) % CHUNKS_X) + CHUNKS_X) % CHUNKS_X][0][(((((z >= 0 ? z : z-15) / Z) + CHUNKS_RANGE) % CHUNKS_Z) + CHUNKS_Z) % CHUNKS_Z];
@@ -67,14 +67,18 @@ namespace Game
 			{
 				x_max++;
 				x_mpos = (x_mpos + 1) % CHUNKS_X;
-				for(int z = 0; z < CHUNKS_Z; z++)
+				int i = 0;
+				int new_z = z_max - CHUNKS_Z + 1;
+				for(int z = (z_mpos + 1) % CHUNKS_Z; i < CHUNKS_Z; z = (z + 1) % CHUNKS_Z)
 				{
-					int new_z = chunks[x_mpos][0][z]->cz;
 //					std::cout << "Deleting " << chunks[x_mpos][0][z] << std::endl;
 //					std::cout << "Deleted chunk at (" << chunks[x_mpos][0][z]->cx << ", " << chunks[x_mpos][0][z]->cz << ")" << std::endl;
 //					delete chunks[x_mpos][0][z];
 					wg_threads[(x_mpos + z) % 4]->add_task(x_max, new_z, x_mpos, z);
+					i++;
+					new_z++;
 				}
+				std::cout << "Tasks: " << i << std::endl;
 				x--;		
 			}
 		}
@@ -84,15 +88,19 @@ namespace Game
 			{
 				x_max--;
 				x_mpos = (x_mpos - 1 + CHUNKS_X) % CHUNKS_X;
-				for(int z = 0; z < CHUNKS_Z; z++)
+				int i = 0;
+				int new_z = z_max - CHUNKS_Z + 1;
+				for(int z = (z_mpos + 1) % CHUNKS_Z; i < CHUNKS_Z; z = (z + 1) % CHUNKS_Z)
 				{
 					int mark = (x_mpos + 1) % CHUNKS_X;
-					int new_z = chunks[mark][0][z]->cz;
 //					std::cout << "Deleting " << chunks[mark][0][z] << std::endl;
 //					std::cout << "Deleted chunk at (" << chunks[mark][0][z]->cx << ", " << chunks[mark][0][z]->cz << ")" << std::endl;
 //					delete chunks[mark][0][z];
 					wg_threads[(mark + z) % 4]->add_task(x_max - DIFF, new_z, mark, z);
+					i++;
+					new_z++;
 				}
+				std::cout << "Tasks: " << i << std::endl;
 				x++;
 			}
 		}
@@ -102,14 +110,18 @@ namespace Game
 			{
 				z_max++;
 				z_mpos = (z_mpos + 1) % CHUNKS_Z;
-				for(int x = 0; x < CHUNKS_X; x++)
+				int i = 0;
+				int new_x = x_max - CHUNKS_X + 1;
+				for(int x = (x_mpos + 1) % CHUNKS_X; i < CHUNKS_X; x = (x + 1) % CHUNKS_X)
 				{
-					int new_x = chunks[x][0][z_mpos]->cx;
 //					std::cout << "Deleting " << chunks[x][0][z_mpos] << std::endl;
 //					std::cout << "Deleted chunk at (" << chunks[x][0][z_mpos]->cx << ", " << chunks[x][0][z_mpos]->cz << ")" << std::endl;
 //					delete chunks[x][0][z_mpos];
 					wg_threads[(x + z_mpos) % 4]->add_task(new_x, z_max, x, z_mpos);
+					i++;
+					new_x++;
 				}
+				std::cout << "Tasks: " << i << std::endl;
 				z--;
 			}
 		}
@@ -119,15 +131,19 @@ namespace Game
 			{
 				z_max--;
 				z_mpos = (z_mpos - 1 + CHUNKS_Z) % CHUNKS_Z;
-				for(int x = 0; x < CHUNKS_X; x++)
+				int i = 0;
+				int new_x = x_max - CHUNKS_X + 1;
+				for(int x = (x_mpos + 1) % CHUNKS_X; i < CHUNKS_X; x = (x + 1) % CHUNKS_X)
 				{
 					int mark = (z_mpos + 1) % CHUNKS_Z;
-					int new_x = chunks[x][0][mark]->cx;
 //					std::cout << "Deleting " << chunks[x][0][mark] << std::endl;
 //					std::cout << "Deleted chunk at (" << chunks[x][0][mark]->cx << ", " << chunks[x][0][mark]->cz << ")" << std::endl;
 //					delete chunks[x][0][mark];
 					wg_threads[(x + mark) % 4]->add_task(new_x, z_max - DIFF, x, mark);
+					i++;
+					new_x++;
 				}
+				std::cout << "Tasks: " << i << std::endl;
 				z++;
 			}
 		}
@@ -173,5 +189,18 @@ namespace Game
 			}
 		}
 	}
+
+	void World::print(std::ostream& out)
+	{
+//		for (int x = 0; x < CHUNKS_X; x++)
+//		{
+//			for (int z = 0; z < CHUNKS_Z; z++)
+//			{
+//				out << "(" << chunks[x][0][z]->cx << ", " << chunks[x][0][z]->cz << "), ";
+//			}
+//			out << std::endl;
+//		}
+//		out << "------------------------------------------------------------------------------------------------------------------------------------------------------" << std::endl;
+	};
 
 }
