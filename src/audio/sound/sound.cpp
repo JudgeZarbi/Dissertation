@@ -20,7 +20,7 @@ namespace Game
         // Get the number of samples (per channel) in the current link.
         int pcm_size = op_pcm_total(f,-1);
 
-        printf("%s: %d channels, %d samples (%d seconds)\n","FTF.opus", num_channels, pcm_size, pcm_size/48000);
+        std::cout << "FTF.opus" << ": " << num_channels << " channels, " << pcm_size << " samples (" << pcm_size/48000 << " seconds)" << std::endl;
 
         alGenBuffers(num_buffers,buffers);
 
@@ -57,7 +57,7 @@ namespace Game
         }
         else
         {
-            fprintf(stderr, "File contained more channels than we support (%d).\n", num_channels);
+            std::cerr << "File contained more channels than we support (" << num_channels << ")." << std::endl;
             return OP_EIMPL;
         }
 
@@ -101,7 +101,7 @@ namespace Game
         alGetSourcei(source, AL_SOURCE_STATE, &source_state);
         if (source_state != AL_PLAYING)
         {
-            printf("Source not playing!\n");
+            std::cout << "Source not playing!" << std::endl;
             alSourcePlay(source);
         }
 

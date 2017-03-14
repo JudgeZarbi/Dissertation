@@ -16,7 +16,7 @@ namespace Game
 
         if (!dev)
         {
-            fprintf(stderr, "Couldn't open OpenAL device.\n");
+            std::cerr << "Couldn't open OpenAL device." << std::endl;
         }
 
         // We want an OpenAL context.
@@ -26,7 +26,7 @@ namespace Game
 
         if (!ctx)
         {
-            fprintf(stderr,"Context fail\n");
+            std::cerr << "Context fail" << std::endl;
             alcCloseDevice(dev);
         }
 
