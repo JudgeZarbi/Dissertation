@@ -34,7 +34,6 @@ namespace Game
     int Sound::fill_buffer(ALuint buffer, OggOpusFile* file)
     {
         // Let's have a buffer that is two opus frames long (and two channels)
-        const int buffer_size = 960*32*2;
         int16_t buf[buffer_size];
 
         int samples_read = 0;

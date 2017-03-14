@@ -9,7 +9,8 @@
 
 namespace Game
 {
-	const int num_buffers = 5;
+	const int NUM_BUFFERS = 5;
+    const int BUFFER_SIZE = 960*32*2;
 
 	struct Sound
 	{
