@@ -11,9 +11,8 @@ namespace Game
         alSource3f(source, AL_POSITION, 0.f,0.f,0.f);
         alSourcef(source, AL_GAIN, 1.0f);
 
-        int error = 0;
         // Open the file.
-        f = op_open_file("audio/music/FTF.opus", &error);
+        f = op_open_file("audio/music/FTF.opus", NULL);
 
         // Get the number of channels in the current link.
         int num_channels = op_channel_count(f,-1);
