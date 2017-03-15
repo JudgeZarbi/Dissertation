@@ -15,7 +15,7 @@ namespace Game
 	struct Sound
 	{
 	    ALuint source;
-	    ALuint buffers[num_buffers];
+	    ALuint buffers[NUM_BUFFERS];
 	    OggOpusFile *f;
 
 		Sound();

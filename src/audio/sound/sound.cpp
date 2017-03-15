@@ -21,20 +21,20 @@ namespace Game
 
         std::cout << "FTF.opus" << ": " << num_channels << " channels, " << pcm_size << " samples (" << pcm_size/48000 << " seconds)" << std::endl;
 
-        alGenBuffers(num_buffers,buffers);
+        alGenBuffers(NUM_BUFFERS,buffers);
 
-        for (int cur_buf = 0; cur_buf < num_buffers; ++cur_buf)
+        for (int cur_buf = 0; cur_buf < NUM_BUFFERS; ++cur_buf)
         {
             fill_buffer(buffers[cur_buf],f);        
         }
 
-        alSourceQueueBuffers(source,num_buffers,buffers);
+        alSourceQueueBuffers(source,NUM_BUFFERS,buffers);
     }
 
     int Sound::fill_buffer(ALuint buffer, OggOpusFile* file)
     {
         // Let's have a buffer that is two opus frames long (and two channels)
-        int16_t buf[buffer_size];
+        int16_t buf[BUFFER_SIZE];
 
         int samples_read = 0;
 
@@ -60,10 +60,10 @@ namespace Game
         }
 
         // Keep reading samples until we have them all.
-        while (samples_read < buffer_size)
+        while (samples_read < BUFFER_SIZE)
         {
             // op_read returns number of samples read (per channel), and accepts number of samples which fit in the buffer, not number of bytes.
-            int ns = op_read(file, buf + samples_read*num_channels, (buffer_size-samples_read*num_channels), 0);
+            int ns = op_read(file, buf + samples_read*num_channels, (BUFFER_SIZE-samples_read*num_channels), 0);
             if (ns < 0)
             {
                 return ns;
