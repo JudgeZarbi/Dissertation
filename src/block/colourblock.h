@@ -5,7 +5,7 @@
 
 namespace Game
 {
-	struct ColourBlock : public RightClickBlock
+	struct ColourBlock : public virtual RightClickBlock
 	{
 		ColourBlock(): RightClickBlock(5) {};
 

@@ -4,7 +4,7 @@
 
 namespace Game
 {
-	struct RightClickBlock : public Block
+	struct RightClickBlock : public virtual Block
 	{
 		RightClickBlock(uint8_t type): Block(type) {};
 
