@@ -2,17 +2,9 @@
 
 namespace Game
 {
-	WorldGenThread::WorldGenThread(int x1, int z1, int x2, int z2, World* world, int id) : world(world), id(id)
+	WorldGenThread::WorldGenThread(World* world) : world(world)
 	{
-		for(int x = x1; x <= x2; x++)
-		{
-			for(int z = z1; z <= z2; z++)
-			{
-				tasks[(end + 1) % MAX_TASKS] = Task(x, z, x + CHUNKS_RANGE, z + CHUNKS_RANGE);
-				end = (end + 1) % MAX_TASKS;
-//				std::cout << "Task: x: " << tasks[end].x << ", z: " << tasks[end].z << ", x_arr: " << tasks[end].arr_x << ", z_arr: " << tasks[end].arr_z << std::endl;
-			}
-		}
+
 	}
 
 	void WorldGenThread::create_thread()
@@ -34,6 +26,7 @@ namespace Game
 					world->chunks[tasks[cur].arr_x][0][tasks[cur].arr_z]->cx = tasks[cur].x;
 					world->chunks[tasks[cur].arr_x][0][tasks[cur].arr_z]->cz = tasks[cur].z;
 					world->chunks[tasks[cur].arr_x][0][tasks[cur].arr_z]->initialise();
+					world->chunks[tasks[cur].arr_x][0][tasks[cur].arr_z]->build_vertices();
 					if (tasks[cur].arr_x == 15 && tasks[cur].arr_z == 6)
 					{
 //						std::cout << world->chunks[15][0][6]->cx << world->chunks[15][0][6]->cz << std::endl;
@@ -43,12 +36,16 @@ namespace Game
 				{				
 					world->chunks[tasks[cur].arr_x][0][tasks[cur].arr_z] = new Chunk(tasks[cur].x, 0, tasks[cur].z);
 					world->chunks[tasks[cur].arr_x][0][tasks[cur].arr_z]->initialise();
+					world->chunks[tasks[cur].arr_x][0][tasks[cur].arr_z]->build_vertices();
 				}
 //				std::cout << "Created chunk (" << tasks[cur].x << ", " << tasks[cur].z << ") at array (" << tasks[cur].arr_x << ", " << tasks[cur].arr_z << ")" << std::endl;
 			}
 			else
 			{
-				busy = false;
+				if(done)
+				{
+					busy = false;				
+				}
 				usleep(500*1000);
 			}
 		}

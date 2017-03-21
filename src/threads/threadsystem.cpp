@@ -11,14 +11,24 @@ namespace Game
 
 	void ThreadSystem::start_world_gen_threads(World* world)
 	{
-		wg_threads[0] = new WorldGenThread(0, 0, Game::CHUNKS_RANGE, Game::CHUNKS_RANGE, world, 0);
-		wg_threads[0]->create_thread();
-		wg_threads[1] = new WorldGenThread(0, -Game::CHUNKS_RANGE, Game::CHUNKS_RANGE, -1, world, 1);
-		wg_threads[1]->create_thread();
-		wg_threads[2] = new WorldGenThread(-Game::CHUNKS_RANGE, -Game::CHUNKS_RANGE, -1, -1, world, 2);
-		wg_threads[2]->create_thread();
-		wg_threads[3] = new WorldGenThread(-Game::CHUNKS_RANGE, 0, -1, Game::CHUNKS_RANGE, world, 3);
-		wg_threads[3]->create_thread();		
+		for(int i = 0; i < NUM_THREADS; i++)
+		{
+			wg_threads[i] = new WorldGenThread(world);
+			wg_threads[i]->create_thread();
+		}
+
+		for(int x = 0; x < CHUNKS_X; x++)
+		{
+			for(int z = 0; z < CHUNKS_Z; z++)
+			{
+				wg_threads[(x + z) % NUM_THREADS]->add_task(x - CHUNKS_RANGE, z - CHUNKS_RANGE, x, z);
+			}
+		}
+
+		for (int i = 0; i < NUM_THREADS; i++)
+		{
+			wg_threads[i]->done = true;
+		}
 	}
 
 	void ThreadSystem::start_audio_thread(AudioSystem* as)

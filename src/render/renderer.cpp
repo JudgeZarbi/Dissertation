@@ -257,10 +257,10 @@ namespace Game
 	{
 		if(chunk->changed)
 		{
-			chunk->build_vertices();
 			glBindBuffer(GL_ARRAY_BUFFER, chunk->vbo);
 			glBufferData(GL_ARRAY_BUFFER, chunk->elements * sizeof(vertex), chunk->vertices, GL_STATIC_DRAW);
 			delete[] chunk->vertices;
+			chunk->changed = false;
 		}
 //		if(!(chunk->elements))
 //		{

@@ -219,7 +219,6 @@ namespace Game
 
 		elements = i;
 //		std::cout << std::to_string(i) << std::endl;
-		changed = false;
 	}
 
 	bool Chunk::is_visible(int x, int y, int z, int xadj, int yadj, int zadj)

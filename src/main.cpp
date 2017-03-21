@@ -192,7 +192,7 @@ int main() {
     	}
     }
 
-    world->consistency();
+//    world->consistency();
 
     end = std::chrono::high_resolution_clock::now();
 	std::chrono::duration<double> elapsed_seconds = end-start;
