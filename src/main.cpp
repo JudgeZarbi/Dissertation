@@ -172,6 +172,8 @@ void mainLoop()
 }
 
 int main() {
+    std::chrono::time_point<std::chrono::high_resolution_clock> start, end;
+    start = std::chrono::high_resolution_clock::now;
 	if (!init_resources())
 	{
 		return EXIT_FAILURE;
@@ -192,6 +194,8 @@ int main() {
 
     world->consistency();
 
+    end = std::chrono::high_resolution_clock::now;
+    std::cout << "Time to start: " << start-end << std::endl;
     mainLoop();
 
 	free_resources();
