@@ -10,7 +10,7 @@ namespace Game
 			{
 				tasks[(end + 1) % MAX_TASKS] = Task(x, z, x + CHUNKS_RANGE, z + CHUNKS_RANGE);
 				end = (end + 1) % MAX_TASKS;
-				std::cout << "Task: x: " << tasks[end].x << ", z: " << tasks[end].z << ", x_arr: " << tasks[end].arr_x << ", z_arr: " << tasks[end].arr_z << std::endl;
+//				std::cout << "Task: x: " << tasks[end].x << ", z: " << tasks[end].z << ", x_arr: " << tasks[end].arr_x << ", z_arr: " << tasks[end].arr_z << std::endl;
 			}
 		}
 	}
@@ -44,7 +44,7 @@ namespace Game
 					world->chunks[tasks[cur].arr_x][0][tasks[cur].arr_z] = new Chunk(tasks[cur].x, 0, tasks[cur].z);
 					world->chunks[tasks[cur].arr_x][0][tasks[cur].arr_z]->initialise();
 				}
-				std::cout << "Created chunk (" << tasks[cur].x << ", " << tasks[cur].z << ") at array (" << tasks[cur].arr_x << ", " << tasks[cur].arr_z << ")" << std::endl;
+//				std::cout << "Created chunk (" << tasks[cur].x << ", " << tasks[cur].z << ") at array (" << tasks[cur].arr_x << ", " << tasks[cur].arr_z << ")" << std::endl;
 			}
 			else
 			{

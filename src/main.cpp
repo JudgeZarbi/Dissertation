@@ -14,6 +14,7 @@
 #include <glm/gtc/noise.hpp>
 #include <thread>
 #include <unistd.h>
+#include <chrono>
 
 //Extra includes for my files.
 #include "controls/keyboard.h"
@@ -173,7 +174,7 @@ void mainLoop()
 
 int main() {
     std::chrono::time_point<std::chrono::high_resolution_clock> start, end;
-    start = std::chrono::high_resolution_clock::now;
+    start = std::chrono::high_resolution_clock::now();
 	if (!init_resources())
 	{
 		return EXIT_FAILURE;
@@ -187,15 +188,15 @@ int main() {
     {
     	while(ts->wg_threads[i]->busy)
     	{
-    		usleep(100*1000);
-    		std::cout << "Waiting!" << std::endl;
+    		usleep(10*1000);
     	}
     }
 
     world->consistency();
 
-    end = std::chrono::high_resolution_clock::now;
-    std::cout << "Time to start: " << start-end << std::endl;
+    end = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<double> elapsed_seconds = end-start;
+    std::cout << "Time to start: " << elapsed_seconds.count() << std::endl;
     mainLoop();
 
 	free_resources();
