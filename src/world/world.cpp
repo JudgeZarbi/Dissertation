@@ -65,6 +65,8 @@ namespace Game
 		{
 			while (x != 0)
 			{
+				x_load = (x_load + 1) % CHUNKS_X;
+				x_load_max = (x_load_max + 1) % CHUNKS_X;	
 				x_max++;
 				x_mpos = (x_mpos + 1) % CHUNKS_X;
 				int i = 0;
@@ -74,18 +76,24 @@ namespace Game
 //					std::cout << "Deleting " << chunks[x_mpos][0][z] << std::endl;
 //					std::cout << "Deleted chunk at (" << chunks[x_mpos][0][z]->cx << ", " << chunks[x_mpos][0][z]->cz << ")" << std::endl;
 //					delete chunks[x_mpos][0][z];
-					wg_threads[(x_mpos + z) % 4]->add_task(x_max, new_z, x_mpos, z);
+					wg_threads[(x_mpos + z) % NUM_THREADS]->add_wg_task(x_max, new_z, x_mpos, z);
 					i++;
 					new_z++;
 				}
+				for(int z = z_load; z <= z_load_max; z = (z + 1) % CHUNKS_Z)
+				{
+					wg_threads[(x_load_max + z) % NUM_THREADS]->add_r_task(x_load_max, z);
+				}
 				std::cout << "Tasks: " << i << std::endl;
-				x--;		
+				x--;
 			}
 		}
 		else if (x < 0)
 		{
 			while (x != 0)
 			{
+				x_load = (x_load - 1 + CHUNKS_X) % CHUNKS_X;
+				x_load_max = (x_load_max - 1 + CHUNKS_X) % CHUNKS_X;		
 				x_max--;
 				x_mpos = (x_mpos - 1 + CHUNKS_X) % CHUNKS_X;
 				int i = 0;
@@ -96,9 +104,13 @@ namespace Game
 //					std::cout << "Deleting " << chunks[mark][0][z] << std::endl;
 //					std::cout << "Deleted chunk at (" << chunks[mark][0][z]->cx << ", " << chunks[mark][0][z]->cz << ")" << std::endl;
 //					delete chunks[mark][0][z];
-					wg_threads[(mark + z) % 4]->add_task(x_max - DIFF, new_z, mark, z);
+					wg_threads[(mark + z) % NUM_THREADS]->add_wg_task(x_max - DIFF, new_z, mark, z);
 					i++;
 					new_z++;
+				}
+				for(int z = z_load; z <= z_load_max; z = (z + 1) % CHUNKS_Z)
+				{
+					wg_threads[(x_load + z) % NUM_THREADS]->add_r_task(x_load, z);
 				}
 				std::cout << "Tasks: " << i << std::endl;
 				x++;
@@ -108,6 +120,8 @@ namespace Game
 		{
 			while (z != 0)
 			{
+				z_load = (z_load + 1) % CHUNKS_Z;
+				z_load_max = (z_load_max + 1) % CHUNKS_Z;		
 				z_max++;
 				z_mpos = (z_mpos + 1) % CHUNKS_Z;
 				int i = 0;
@@ -117,9 +131,13 @@ namespace Game
 //					std::cout << "Deleting " << chunks[x][0][z_mpos] << std::endl;
 //					std::cout << "Deleted chunk at (" << chunks[x][0][z_mpos]->cx << ", " << chunks[x][0][z_mpos]->cz << ")" << std::endl;
 //					delete chunks[x][0][z_mpos];
-					wg_threads[(x + z_mpos) % 4]->add_task(new_x, z_max, x, z_mpos);
+					wg_threads[(x + z_mpos) % NUM_THREADS]->add_wg_task(new_x, z_max, x, z_mpos);
 					i++;
 					new_x++;
+				}
+				for(int x = x_load; x <= x_load_max; x = (x + 1) % CHUNKS_X)
+				{
+					wg_threads[(x + z_load_max) % NUM_THREADS]->add_r_task(x, z_load_max);
 				}
 				std::cout << "Tasks: " << i << std::endl;
 				z--;
@@ -129,6 +147,8 @@ namespace Game
 		{
 			while (z != 0)
 			{
+				z_load = (z_load - 1 + CHUNKS_Z) % CHUNKS_Z;
+				z_load_max = (z_load_max - 1 + CHUNKS_Z) % CHUNKS_Z;		
 				z_max--;
 				z_mpos = (z_mpos - 1 + CHUNKS_Z) % CHUNKS_Z;
 				int i = 0;
@@ -139,9 +159,13 @@ namespace Game
 //					std::cout << "Deleting " << chunks[x][0][mark] << std::endl;
 //					std::cout << "Deleted chunk at (" << chunks[x][0][mark]->cx << ", " << chunks[x][0][mark]->cz << ")" << std::endl;
 //					delete chunks[x][0][mark];
-					wg_threads[(x + mark) % 4]->add_task(new_x, z_max - DIFF, x, mark);
+					wg_threads[(x + mark) % NUM_THREADS]->add_wg_task(new_x, z_max - DIFF, x, mark);
 					i++;
 					new_x++;
+				}
+				for(int x = x_load; x <= x_load_max; x = (x + 1) % CHUNKS_X)
+				{
+					wg_threads[(x + z_load) % NUM_THREADS]->add_r_task(x, z_load);
 				}
 				std::cout << "Tasks: " << i << std::endl;
 				z++;

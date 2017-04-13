@@ -34,6 +34,7 @@ namespace Game
 
 	void Chunk::initialise()
 	{
+		init = false;
 		memset(voxel, 0, sizeof(voxel));
 		for(int x = 0; x < X; x++)
 		{
@@ -60,6 +61,7 @@ namespace Game
 
 	void Chunk::build_vertices()
 	{
+		elements = 0;
 		vertices = new vertex[X * Y * Z * 36];
 		int i = 0;
 		// Cube left side
@@ -218,6 +220,8 @@ namespace Game
 		}
 
 		elements = i;
+		changed = true;
+		vert_ready = true;
 //		std::cout << std::to_string(i) << std::endl;
 	}
 
@@ -265,6 +269,11 @@ namespace Game
 			return b ? b->voxel[x][y][z - Z] : 0;
 		}
 		return voxel[x][y][z];
+	}
+
+	void Chunk::clear_vertices()
+	{
+		delete[] vertices;
 	}
 
 }

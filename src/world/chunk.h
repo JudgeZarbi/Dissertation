@@ -22,6 +22,7 @@ namespace Game
 		int elements;
 		bool init;
 		bool changed;
+		bool vert_ready = false;
 		Chunk* l;
 		Chunk* r;
 		Chunk* b;
@@ -39,6 +40,7 @@ namespace Game
 		void build_vertices();
 		bool is_visible(int x, int y, int z, int xadj, int yadj, int zadj);
 		Block* get_block(int x, int y, int z);
+		void clear_vertices();
 
 	};
 

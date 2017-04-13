@@ -29,12 +29,16 @@ namespace Game
 
 		void create_thread();
 		void loop();
-		bool add_task(int x, int z, int arr_x, int arr_z);
+		bool add_wg_task(int x, int z, int arr_x, int arr_z);
+		bool add_r_task(int arr_x, int arr_z);
 
-		Task tasks[MAX_TASKS];
+		Task wg_tasks[MAX_TASKS];
+		Task r_tasks[MAX_TASKS];
 		std::thread* thread;
-		uint8_t cur = MAX_TASKS - 1;
-		uint8_t end = MAX_TASKS - 1;
+		uint16_t wg_cur = MAX_TASKS - 1;
+		uint16_t wg_end = MAX_TASKS - 1;
+		uint16_t r_cur = MAX_TASKS - 1;
+		uint16_t r_end = MAX_TASKS - 1;
 		World* world;
 		bool busy = true;
 		bool done = false;

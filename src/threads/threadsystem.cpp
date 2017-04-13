@@ -21,7 +21,15 @@ namespace Game
 		{
 			for(int z = 0; z < CHUNKS_Z; z++)
 			{
-				wg_threads[(x + z) % NUM_THREADS]->add_task(x - CHUNKS_RANGE, z - CHUNKS_RANGE, x, z);
+				wg_threads[(x + z) % NUM_THREADS]->add_wg_task(x - CHUNKS_RANGE, z - CHUNKS_RANGE, x, z);
+			}
+		}
+
+		for(int x = CHUNKS_X - CHUNKS_RANGE - FRAME_RANGE - VERT_RANGE; x <= CHUNKS_X - CHUNKS_RANGE + FRAME_RANGE + VERT_RANGE; x++)
+		{
+			for(int z = CHUNKS_Z - CHUNKS_RANGE - FRAME_RANGE - VERT_RANGE; z <= CHUNKS_Z - CHUNKS_RANGE + FRAME_RANGE + VERT_RANGE; z++)
+			{
+				wg_threads[(x + z) % NUM_THREADS]->add_r_task(x, z);
 			}
 		}
 

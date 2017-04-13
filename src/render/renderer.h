@@ -13,6 +13,7 @@ namespace Game
 		void render(World* world);
 		void render(Chunk* chunk);
 		void onResize(int width, int height);
+		void buffer(Chunk* chunk);
 
 		static Renderer* instance;
 		GLuint program;

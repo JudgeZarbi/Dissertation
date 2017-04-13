@@ -7,8 +7,6 @@
 
 namespace Game
 {
-	const static int NUM_THREADS = 4;
-
 	struct ThreadSystem
 	{
 		static void initialise();

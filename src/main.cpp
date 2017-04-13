@@ -184,7 +184,7 @@ int main() {
 	Game::angle = glm::vec3(0, -0.5, 0);
 	Game::update_vectors();
 
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < Game::NUM_THREADS; i++)
     {
     	while(ts->wg_threads[i]->busy)
     	{

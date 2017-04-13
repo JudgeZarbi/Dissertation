@@ -13,7 +13,9 @@ namespace Game
 	const int FRAME_RANGE = 5;
 	//temp
 	const int DIFF = 2 * CHUNKS_RANGE;
-	const int MAX_TASKS = (CHUNKS_RANGE + 1) * (CHUNKS_RANGE + 10);
+	const int MAX_TASKS = CHUNKS_X * CHUNKS_Z + 1;
+	const int NUM_THREADS = 2;
+	const int VERT_RANGE = 2;
 }
 
 #endif

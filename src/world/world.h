@@ -24,6 +24,10 @@ namespace Game
 		int z_max;
 		int x_mpos;
 		int z_mpos;
+		int x_load = CHUNKS_X - CHUNKS_RANGE - FRAME_RANGE - VERT_RANGE;
+		int z_load = CHUNKS_Z - CHUNKS_RANGE - FRAME_RANGE - VERT_RANGE;
+		int x_load_max = CHUNKS_X - CHUNKS_RANGE + FRAME_RANGE + VERT_RANGE;
+		int z_load_max = CHUNKS_Z - CHUNKS_RANGE + FRAME_RANGE + VERT_RANGE;
 		int x_old = 0;
 		int z_old = 0;
 

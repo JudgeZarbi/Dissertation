@@ -17,28 +17,31 @@ namespace Game
 		//Should probably add a kill signal so I can exit more cleanly than I do.
 		while(true)
 		{
-			if(cur != end)
+			if(wg_cur != wg_end)
 			{
-				cur = (cur + 1) % MAX_TASKS;
-				if(world->chunks[tasks[cur].arr_x][0][tasks[cur].arr_z] != 0)
+				wg_cur = (wg_cur + 1) % MAX_TASKS;
+				if(world->chunks[wg_tasks[wg_cur].arr_x][0][wg_tasks[wg_cur].arr_z] != 0)
 				{
-//					delete world->chunks[tasks[cur].arr_x][0][tasks[cur].arr_z];
-					world->chunks[tasks[cur].arr_x][0][tasks[cur].arr_z]->cx = tasks[cur].x;
-					world->chunks[tasks[cur].arr_x][0][tasks[cur].arr_z]->cz = tasks[cur].z;
-					world->chunks[tasks[cur].arr_x][0][tasks[cur].arr_z]->initialise();
-					world->chunks[tasks[cur].arr_x][0][tasks[cur].arr_z]->build_vertices();
-					if (tasks[cur].arr_x == 15 && tasks[cur].arr_z == 6)
+//					delete world->chunks[wg_tasks[wg_cur].arr_x][0][wg_tasks[wg_cur].arr_z];
+					world->chunks[wg_tasks[wg_cur].arr_x][0][wg_tasks[wg_cur].arr_z]->cx = wg_tasks[wg_cur].x;
+					world->chunks[wg_tasks[wg_cur].arr_x][0][wg_tasks[wg_cur].arr_z]->cz = wg_tasks[wg_cur].z;
+					world->chunks[wg_tasks[wg_cur].arr_x][0][wg_tasks[wg_cur].arr_z]->initialise();
+					if (wg_tasks[wg_cur].arr_x == 15 && wg_tasks[wg_cur].arr_z == 6)
 					{
 //						std::cout << world->chunks[15][0][6]->cx << world->chunks[15][0][6]->cz << std::endl;
 					}
 				}
 				else
 				{				
-					world->chunks[tasks[cur].arr_x][0][tasks[cur].arr_z] = new Chunk(tasks[cur].x, 0, tasks[cur].z);
-					world->chunks[tasks[cur].arr_x][0][tasks[cur].arr_z]->initialise();
-					world->chunks[tasks[cur].arr_x][0][tasks[cur].arr_z]->build_vertices();
+					world->chunks[wg_tasks[wg_cur].arr_x][0][wg_tasks[wg_cur].arr_z] = new Chunk(wg_tasks[wg_cur].x, 0, wg_tasks[wg_cur].z);
+					world->chunks[wg_tasks[wg_cur].arr_x][0][wg_tasks[wg_cur].arr_z]->initialise();
 				}
-//				std::cout << "Created chunk (" << tasks[cur].x << ", " << tasks[cur].z << ") at array (" << tasks[cur].arr_x << ", " << tasks[cur].arr_z << ")" << std::endl;
+//				std::cout << "Created chunk (" << wg_tasks[wg_cur].x << ", " << wg_tasks[wg_cur].z << ") at array (" << wg_tasks[wg_cur].arr_x << ", " << wg_tasks[wg_cur].arr_z << ")" << std::endl;
+			}
+			else if (r_cur != r_end)
+			{
+				r_cur = (r_cur + 1) % MAX_TASKS;
+				world->chunks[r_tasks[r_cur].arr_x][0][r_tasks[r_cur].arr_z]->build_vertices();
 			}
 			else
 			{
@@ -51,18 +54,18 @@ namespace Game
 		}
 	}
 
-	bool WorldGenThread::add_task(int x, int z, int arr_x, int arr_z)
+	bool WorldGenThread::add_wg_task(int x, int z, int arr_x, int arr_z)
 	{
 		//No space left in the queue if this is true.
-		if(end == (cur - 1 + MAX_TASKS) % MAX_TASKS)
+		if(wg_end == (wg_cur - 1 + MAX_TASKS) % MAX_TASKS)
 		{
 			std::cout << "No space!" << std::endl;
 			return false;
 		}
 		else
 		{
-			tasks[(end + 1) % MAX_TASKS] = Task(x, z, arr_x, arr_z);
-			end = (end + 1) % MAX_TASKS;
+			wg_tasks[(wg_end + 1) % MAX_TASKS] = Task(x, z, arr_x, arr_z);
+			wg_end = (wg_end + 1) % MAX_TASKS;
 			if (arr_x == 15 && arr_z == 6)
 			{
 //				std::cout << "Target marked for destruction!" << " " << x << " " << z << std::endl;
@@ -74,5 +77,21 @@ namespace Game
 //			std::cout << "Task added: " << std::to_string(x) << " " << std::to_string(z) << std::endl;
 			return true;
 		}
+	}
+
+	bool WorldGenThread::add_r_task(int arr_x, int arr_z)
+	{
+		//No space left in the queue if this is true.
+		if(r_end == (r_cur - 1 + MAX_TASKS) % MAX_TASKS)
+		{
+			std::cout << "No space!" << std::endl;
+			return false;
+		}
+		else
+		{
+			r_tasks[(r_end + 1) % MAX_TASKS] = Task(0, 0, arr_x, arr_z);
+			r_end = (r_end + 1) % MAX_TASKS;
+			return true;
+		}		
 	}
 }

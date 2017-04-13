@@ -95,6 +95,21 @@ namespace Game
 		int cur_x_chunk = (((((cur_x >= 0 ? cur_x : cur_x - 15) / X) + CHUNKS_RANGE) % CHUNKS_X) + CHUNKS_X) % CHUNKS_X;
 		int cur_z_chunk = (((((cur_z >= 0 ? cur_z : cur_z - 15) / Z) + CHUNKS_RANGE) % CHUNKS_Z) + CHUNKS_Z) % CHUNKS_Z;
 
+		for(int x = 0; x < CHUNKS_X; x++)
+		{
+			for(int z = 0; z < CHUNKS_Z; z++)
+			{
+				if (!world->chunks[x][0][z]->vbo)
+				{
+					glGenBuffers(1, &(world->chunks[x][0][z]->vbo));
+				}
+				if (world->chunks[x][0][z]->init)
+				{
+					buffer(world->chunks[x][0][z]);
+				}
+			}
+		}
+
 		for(int x = ((cur_x_chunk - FRAME_RANGE) >= 0 ? cur_x_chunk - FRAME_RANGE : (cur_x_chunk - FRAME_RANGE + CHUNKS_X)); x != ((cur_x_chunk + FRAME_RANGE + 1) % CHUNKS_X); x = ((x + 1) % CHUNKS_X))
 		{
 			for(int y = 0; y < CHUNKS_Y; y++)
@@ -102,10 +117,6 @@ namespace Game
 				for(int z = ((cur_z_chunk - FRAME_RANGE) >= 0 ? cur_z_chunk - FRAME_RANGE : (cur_z_chunk - FRAME_RANGE + CHUNKS_Z)); z != ((cur_z_chunk + FRAME_RANGE + 1) % CHUNKS_Z); z = ((z + 1) % CHUNKS_Z))
 				{
 					Chunk* chunk = world->chunks[x][y][z];
-					if (!chunk->vbo)
-					{
-						glGenBuffers(1, &(chunk->vbo));
-					}
 					glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(world->chunks[x][y][z]->cx * X, world->chunks[x][y][z]->cy * Y, world->chunks[x][y][z]->cz * Z));
 					glm::mat4 mvp = pv * model;
 
@@ -253,15 +264,20 @@ namespace Game
 
 	}
 
-	void Renderer::render(Chunk* chunk)
+	void Renderer::buffer(Chunk* chunk)
 	{
-		if(chunk->changed)
+		if(chunk->changed && chunk->vert_ready)
 		{
 			glBindBuffer(GL_ARRAY_BUFFER, chunk->vbo);
 			glBufferData(GL_ARRAY_BUFFER, chunk->elements * sizeof(vertex), chunk->vertices, GL_STATIC_DRAW);
-			delete[] chunk->vertices;
+			chunk->clear_vertices();
 			chunk->changed = false;
+			chunk->vert_ready = false;
 		}
+	}
+
+	void Renderer::render(Chunk* chunk)
+	{
 //		if(!(chunk->elements))
 //		{
 //			std::cout << "lolwat" << std::endl;
