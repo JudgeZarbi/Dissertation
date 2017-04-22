@@ -59,7 +59,7 @@ namespace Game
 		//No space left in the queue if this is true.
 		if(wg_end == (wg_cur - 1 + MAX_TASKS) % MAX_TASKS)
 		{
-			std::cout << "No space!" << std::endl;
+			std::cout << "No space wg!" << std::endl;
 			return false;
 		}
 		else
@@ -84,7 +84,6 @@ namespace Game
 		//No space left in the queue if this is true.
 		if(r_end == (r_cur - 1 + MAX_TASKS) % MAX_TASKS)
 		{
-			std::cout << "No space!" << std::endl;
 			return false;
 		}
 		else

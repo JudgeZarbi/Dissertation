@@ -61,12 +61,14 @@ namespace Game
 //		std::cout << "x: " <<cur_chunk.x << " " << x_old << " " << x << std::endl;
 //		std::cout << "z: " << cur_chunk.z << " " << z_old << " " << z << std::endl;
 
+		x_load = (x_load + x + CHUNKS_X) % CHUNKS_X;
+		z_load = (z_load + z + CHUNKS_Z) % CHUNKS_Z;
+
+
 		if (x > 0)
 		{
 			while (x != 0)
 			{
-				x_load = (x_load + 1) % CHUNKS_X;
-				x_load_max = (x_load_max + 1) % CHUNKS_X;	
 				x_max++;
 				x_mpos = (x_mpos + 1) % CHUNKS_X;
 				int i = 0;
@@ -80,9 +82,10 @@ namespace Game
 					i++;
 					new_z++;
 				}
-				for(int z = z_load; z <= z_load_max; z = (z + 1) % CHUNKS_Z)
+				for(int z = z_load, dist = load_dist; dist-- != 0; z = (z + 1) % CHUNKS_Z)
 				{
-					wg_threads[(x_load_max + z) % NUM_THREADS]->add_r_task(x_load_max, z);
+					std::cout << "x+" << std::endl;
+					wg_threads[(x_load + load_dist + z) % NUM_THREADS]->add_r_task((x_load + load_dist - 1) % CHUNKS_Z, z);
 				}
 				std::cout << "Tasks: " << i << std::endl;
 				x--;
@@ -92,8 +95,6 @@ namespace Game
 		{
 			while (x != 0)
 			{
-				x_load = (x_load - 1 + CHUNKS_X) % CHUNKS_X;
-				x_load_max = (x_load_max - 1 + CHUNKS_X) % CHUNKS_X;		
 				x_max--;
 				x_mpos = (x_mpos - 1 + CHUNKS_X) % CHUNKS_X;
 				int i = 0;
@@ -108,8 +109,9 @@ namespace Game
 					i++;
 					new_z++;
 				}
-				for(int z = z_load; z <= z_load_max; z = (z + 1) % CHUNKS_Z)
+				for(int z = z_load, dist = load_dist; dist-- != 0; z = (z + 1) % CHUNKS_Z)
 				{
+					std::cout << "x-" << std::endl;
 					wg_threads[(x_load + z) % NUM_THREADS]->add_r_task(x_load, z);
 				}
 				std::cout << "Tasks: " << i << std::endl;
@@ -120,8 +122,6 @@ namespace Game
 		{
 			while (z != 0)
 			{
-				z_load = (z_load + 1) % CHUNKS_Z;
-				z_load_max = (z_load_max + 1) % CHUNKS_Z;		
 				z_max++;
 				z_mpos = (z_mpos + 1) % CHUNKS_Z;
 				int i = 0;
@@ -135,9 +135,10 @@ namespace Game
 					i++;
 					new_x++;
 				}
-				for(int x = x_load; x <= x_load_max; x = (x + 1) % CHUNKS_X)
+				for(int x = x_load, dist = load_dist; dist-- != 0; x = (x + 1) % CHUNKS_X)
 				{
-					wg_threads[(x + z_load_max) % NUM_THREADS]->add_r_task(x, z_load_max);
+					std::cout << "z+" << std::endl;
+					wg_threads[(x + z_load + load_dist) % NUM_THREADS]->add_r_task(x, (z_load + load_dist - 1) % CHUNKS_Z);
 				}
 				std::cout << "Tasks: " << i << std::endl;
 				z--;
@@ -147,8 +148,6 @@ namespace Game
 		{
 			while (z != 0)
 			{
-				z_load = (z_load - 1 + CHUNKS_Z) % CHUNKS_Z;
-				z_load_max = (z_load_max - 1 + CHUNKS_Z) % CHUNKS_Z;		
 				z_max--;
 				z_mpos = (z_mpos - 1 + CHUNKS_Z) % CHUNKS_Z;
 				int i = 0;
@@ -163,8 +162,9 @@ namespace Game
 					i++;
 					new_x++;
 				}
-				for(int x = x_load; x <= x_load_max; x = (x + 1) % CHUNKS_X)
+				for(int x = x_load, dist = load_dist; dist-- != 0; x = (x + 1) % CHUNKS_X)
 				{
+					std::cout << "z-: " << dist << std::endl;
 					wg_threads[(x + z_load) % NUM_THREADS]->add_r_task(x, z_load);
 				}
 				std::cout << "Tasks: " << i << std::endl;
