@@ -1,3 +1,7 @@
+/**
+ * Based on code at https://gitlab.com/wikibooks-opengl/modern-tutorials/tree/master/glescraft-sdl2
+ * which is in the public domain.
+ */
 #include "mouse.h"
 
 namespace Game

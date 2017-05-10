@@ -9,12 +9,15 @@ namespace Game
 	struct AudioThread
 	{
 		AudioThread(AudioSystem* sys);
+		virtual ~AudioThread();
 
 		void create_thread();
 		void loop();
+		void stop();
 
 		std::thread* thread;
 		AudioSystem* system;
+		bool run = true;
 	};
 }
 

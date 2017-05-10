@@ -1,3 +1,7 @@
+/**
+ * Based on code at https://gitlab.com/wikibooks-opengl/modern-tutorials/tree/master/glescraft-sdl2
+ * which is in the public domain.
+ */
 #include "chunk.h"
 
 namespace Game
@@ -8,6 +12,25 @@ namespace Game
 		init = false;
 		changed = false;
 //		std::cout << "Chunk ctor: " << cx << " " << cy << " " << cz << std::endl;
+	}
+
+	Chunk::~Chunk()
+	{
+		if(vert_ready)
+		{
+			delete[] vertices;
+		}
+		glDeleteBuffers(1, &vbo);
+		for (int x = 0; x < X; x++)
+		{
+			for (int y = 0; y < Y; y++)
+			{
+				for (int z = 0; z < Z; z++)
+				{
+					delete voxel[x][y][z];
+				}
+			}
+		}
 	}
 
 	//4D generation, no x listed, but is same as 3D
@@ -34,6 +57,19 @@ namespace Game
 
 	void Chunk::initialise()
 	{
+		if (init)
+		{
+			for (int x = 0; x < X; x++)
+			{
+				for (int y = 0; y < Y; y++)
+				{
+					for (int z = 0; z < Z; z++)
+					{
+						delete voxel[x][y][z];
+					}
+				}
+			}			
+		}
 		init = false;
 		memset(voxel, 0, sizeof(voxel));
 		for(int x = 0; x < X; x++)
@@ -274,6 +310,59 @@ namespace Game
 	void Chunk::clear_vertices()
 	{
 		delete[] vertices;
+	}
+
+	void Chunk::initialise_from_file()
+	{
+		if (init)
+		{
+			for (int x = 0; x < X; x++)
+			{
+				for (int y = 0; y < Y; y++)
+				{
+					for (int z = 0; z < Z; z++)
+					{
+						delete voxel[x][y][z];
+					}
+				}
+			}			
+		}
+		init = false;
+		memset(voxel, 0, sizeof(voxel));
+
+		std::stringstream ss;
+		ss << "data/" << cx << " " << cz;
+		const char* s = ss.str().c_str();
+		char* file = data_read(s);
+		char* start = file;
+		std::string str = file;
+
+		for(int x = 0; x < X; x++)
+		{
+			for(int z = 0; z < Z; z++)
+			{
+				int count = 0;
+				while(*file != ';')
+				{
+					count++;
+					file++;
+				}
+				int max_y = std::stoi(str.substr(file-start-count, file-start));
+				file++;
+				for (int y = 0; y <= max_y - 5; y++)
+				{
+					voxel[x][y][z] = new Block(3);
+				}
+				for (int y = max_y-5; y <= max_y - 1; y++)
+				{
+					voxel[x][y][z] = new Block(2);
+				}
+				int y = max_y - 1;
+				voxel[x][y][z] = new Block(1);
+			}
+		}
+		init = true;
+		changed = true;
 	}
 
 }

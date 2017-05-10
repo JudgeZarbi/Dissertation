@@ -26,6 +26,7 @@ namespace Game
 	struct WorldGenThread
 	{
 		WorldGenThread(World* world);
+		virtual ~WorldGenThread();
 
 		void create_thread();
 		void loop();
@@ -43,6 +44,7 @@ namespace Game
 		bool busy = true;
 		bool done = false;
 		int id;
+		bool run = true;
 	};
 }
 

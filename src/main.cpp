@@ -1,7 +1,6 @@
 /**
- * From the OpenGL Programming wikibook: http://en.wikibooks.org/wiki/OpenGL_Programming
- * This file is in the public domain.
- * Contributors: Sylvain Beucler
+ * Based on code at https://gitlab.com/wikibooks-opengl/modern-tutorials/tree/master/glescraft-sdl2
+ * which is in the public domain.
  */
 //Core libraries
 #include <GL/glew.h>
@@ -65,7 +64,10 @@ void render()
 
 void free_resources()
 {
-
+	//Also deletes the audiosystem
+	delete ts;
+	delete world;
+	delete r;
 }
 
 void pause_loop(unsigned short keys)
@@ -80,6 +82,7 @@ void pause_loop(unsigned short keys)
 			{
 				if(ev.key.keysym.scancode == SDL_SCANCODE_P)
 				{
+					SDL_SetRelativeMouseMode(SDL_TRUE);				
 					return;
 				}
 				else
@@ -110,7 +113,14 @@ void mainLoop()
 	as->play_sound("FTF");
 	ts->start_audio_thread(as);
 
+	double max = 999.0;
+	double min;
+	double total = 0;
+	int num = 0;
+
 	while (true) {
+	    std::chrono::time_point<std::chrono::high_resolution_clock> start, end;
+	    start = std::chrono::high_resolution_clock::now();
 		SDL_Event ev;
 		Game::timing();
 		while (SDL_PollEvent(&ev))
@@ -119,10 +129,14 @@ void mainLoop()
 			{
 				if(ev.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
 				{
+					std::cout << "Max FPS: " << std::to_string(1/max) << std::endl;
+					std::cout << "Min FPS: " << std::to_string(1/min) << std::endl;
+					std::cout << "Avg FPS: " << std::to_string(1/(total/num)) << std::endl;
 					return;
 				}
 				else if(ev.key.keysym.scancode == SDL_SCANCODE_P)
 				{
+					SDL_SetRelativeMouseMode(SDL_FALSE);
 					pause_loop(keys);
 				}
 				else
@@ -165,10 +179,24 @@ void mainLoop()
 		{
 			Game::movement(keys);			
 		}
+		Game::gravity(world);
 //		std::cout << "(" << Game::position.x << ", " << Game::position.y << ", " << Game::position.z << ")" << std::endl;
 		world->move(ts->wg_threads);
 		render();
-		world->print(std::cout);
+	    end = std::chrono::high_resolution_clock::now();
+		std::chrono::duration<double> dur_d = end-start;
+		double dur = dur_d.count();
+	    if (dur < max && num > 0)
+	    {
+	    	max = dur;
+	    }
+	    else if (dur > min && num > 0)
+	   	{
+	   		min = dur;
+	   	}
+	   	total += dur;
+	   	std::cout << std::to_string(dur) << std::endl;
+	   	num++;
 	}
 }
 
@@ -188,7 +216,11 @@ int main() {
     {
     	while(ts->wg_threads[i]->busy)
     	{
-    		usleep(10*1000);
+#ifdef __linux__
+				usleep(10*1000);
+#elif _WIN32
+				Sleep(10);
+#endif
     	}
     }
 

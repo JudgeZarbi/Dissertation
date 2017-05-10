@@ -14,6 +14,7 @@ namespace Game
 	struct AudioSystem
 	{
 		AudioSystem();
+		virtual ~AudioSystem();
 
 		static void initialise();
 		void play_sound(std::string name);

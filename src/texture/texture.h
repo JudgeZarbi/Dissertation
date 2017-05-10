@@ -1,3 +1,7 @@
+/**
+ * Based on code at https://gitlab.com/wikibooks-opengl/modern-tutorials/tree/master/glescraft-sdl2
+ * which is in the public domain.
+ */
 #ifndef CONTROLS_TEXTURE_H
 #define CONTROLS_TEXTURE_H
 

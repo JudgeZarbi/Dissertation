@@ -9,6 +9,16 @@ namespace Game
 		instance = new ThreadSystem();
 	}
 
+	ThreadSystem::~ThreadSystem()
+	{
+		delete a_thread;
+		for (int i = 0; i < NUM_THREADS; i++)
+		{
+			delete wg_threads[i];
+		}
+		ThreadSystem::instance = NULL;
+	}
+
 	void ThreadSystem::start_world_gen_threads(World* world)
 	{
 		for(int i = 0; i < NUM_THREADS; i++)
@@ -49,6 +59,7 @@ namespace Game
 	{
 		return wg_threads[index];
 	}
+
 }
 
 

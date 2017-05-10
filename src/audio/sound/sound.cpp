@@ -1,3 +1,8 @@
+/**
+ * Based on code at https://davidgow.net/hacks/opusal.html
+ * which is in the public domain.
+ */
+
 #include "sound.h"
 
 namespace Game
@@ -29,6 +34,19 @@ namespace Game
         }
 
         alSourceQueueBuffers(source,NUM_BUFFERS,buffers);
+    }
+
+    Sound::~Sound()
+    {
+        alSourceUnqueueBuffers(source,NUM_BUFFERS,buffers);
+
+        // We have to delete the source here, as OpenAL soft seems to need
+        // the source gone before the buffers. Perhaps this is just timing.
+        alDeleteSources(1,&source);
+        alDeleteBuffers(NUM_BUFFERS,buffers);
+
+        // Close the opus file.
+        op_free(f);        
     }
 
     int Sound::fill_buffer(ALuint buffer, OggOpusFile* file)

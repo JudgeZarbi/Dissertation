@@ -1,7 +1,19 @@
+/**
+ * Based on code at https://gitlab.com/wikibooks-opengl/modern-tutorials/tree/master/glescraft-sdl2
+ * which is in the public domain.
+ */
 #include "renderer.h"
 
 namespace Game
 {
+	Renderer::~Renderer()
+	{
+		glDeleteProgram(program);
+		SDL_DestroyWindow(window);
+		SDL_Quit();
+	}
+	
+
 	void Renderer::initialise()
 	{
 		SDL_Init(SDL_INIT_VIDEO);
@@ -290,8 +302,8 @@ namespace Game
 
 	void Renderer::onResize(int width, int height)
 	{
-//		screen_width = width;
-//		screen_height = height;
+		screen_width = width;
+		screen_height = height;
 		glViewport(0, 0, screen_width, screen_height);
 	}
 

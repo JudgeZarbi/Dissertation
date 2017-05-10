@@ -1,3 +1,7 @@
+/**
+ * Based on code at https://gitlab.com/wikibooks-opengl/modern-tutorials/tree/master/glescraft-sdl2
+ * which is in the public domain.
+ */
 #ifndef _RENDER_RENDERER_H
 #define _RENDER_RENDERER_H
 
@@ -9,6 +13,8 @@ namespace Game
 {
 	struct Renderer
 	{
+		virtual ~Renderer();
+
 		void initialise();
 		void render(World* world);
 		void render(Chunk* chunk);
@@ -26,8 +32,8 @@ namespace Game
 		int mx, my, mz;
 		int face;
 		bool target;
-		const int screen_width=800;
-		const int screen_height=600;
+		int screen_width=800;
+		int screen_height=600;
 	};
 }
 #endif

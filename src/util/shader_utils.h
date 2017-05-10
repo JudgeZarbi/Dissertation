@@ -7,6 +7,7 @@
 namespace Game
 {
 	extern char* file_read(const char* filename);
+	extern char* data_read(const char* filename);
 	extern void print_log(GLuint object);
 	extern GLuint create_shader(const char* filename, GLenum type);
 	GLuint create_program(const char* vs, const char* fs);

@@ -1,3 +1,8 @@
+/**
+ * Based on code at https://davidgow.net/hacks/opusal.html
+ * which is in the public domain.
+ */
+
 #include "audiosystem.h"
 
 namespace Game
@@ -37,6 +42,16 @@ namespace Game
 
     }
 
+    AudioSystem::~AudioSystem()
+    {
+        delete sounds[0];
+        sounds.pop_back();
+
+        alcCloseDevice(dev);
+        alcMakeContextCurrent(0);
+        alcDestroyContext(ctx);
+    }    
+
     void AudioSystem::play_sound(std::string name)
     {
         sounds.push_back(new Sound());
@@ -45,11 +60,11 @@ namespace Game
 
     void AudioSystem::update_sounds()
     {
-        while(true)
-        {
-            sounds[0]->update_stream();
-            usleep(50*1000);          
-        }
+        sounds[0]->update_stream();
+#ifdef __linux__
+        usleep(50*1000);
+#elif _WIN32
+        Sleep(50);
+#endif
     }
-
 }

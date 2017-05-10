@@ -1,3 +1,7 @@
+/**
+ * Based on code at https://gitlab.com/wikibooks-opengl/modern-tutorials/tree/master/glescraft-sdl2
+ * which is in the public domain.
+ */
 #include "world.h"
 
 namespace Game
@@ -26,6 +30,17 @@ namespace Game
 		}
 
 */
+	}
+
+	World::~World()
+	{
+		for (int x = 0; x < CHUNKS_X; x++)
+		{
+			for (int z = 0; z < CHUNKS_Z; z++)
+			{
+				delete chunks[x][0][z];
+			}
+		}
 	}
 
 	Block* World::get(int x, int y, int z) const
@@ -84,7 +99,6 @@ namespace Game
 				}
 				for(int z = z_load, dist = load_dist; dist-- != 0; z = (z + 1) % CHUNKS_Z)
 				{
-					std::cout << "x+" << std::endl;
 					wg_threads[(x_load + load_dist + z) % NUM_THREADS]->add_r_task((x_load + load_dist - 1) % CHUNKS_Z, z);
 				}
 				std::cout << "Tasks: " << i << std::endl;
@@ -111,7 +125,6 @@ namespace Game
 				}
 				for(int z = z_load, dist = load_dist; dist-- != 0; z = (z + 1) % CHUNKS_Z)
 				{
-					std::cout << "x-" << std::endl;
 					wg_threads[(x_load + z) % NUM_THREADS]->add_r_task(x_load, z);
 				}
 				std::cout << "Tasks: " << i << std::endl;
@@ -137,7 +150,6 @@ namespace Game
 				}
 				for(int x = x_load, dist = load_dist; dist-- != 0; x = (x + 1) % CHUNKS_X)
 				{
-					std::cout << "z+" << std::endl;
 					wg_threads[(x + z_load + load_dist) % NUM_THREADS]->add_r_task(x, (z_load + load_dist - 1) % CHUNKS_Z);
 				}
 				std::cout << "Tasks: " << i << std::endl;
@@ -164,7 +176,6 @@ namespace Game
 				}
 				for(int x = x_load, dist = load_dist; dist-- != 0; x = (x + 1) % CHUNKS_X)
 				{
-					std::cout << "z-: " << dist << std::endl;
 					wg_threads[(x + z_load) % NUM_THREADS]->add_r_task(x, z_load);
 				}
 				std::cout << "Tasks: " << i << std::endl;

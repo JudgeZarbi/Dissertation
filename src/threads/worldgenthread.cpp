@@ -7,6 +7,13 @@ namespace Game
 
 	}
 
+	WorldGenThread::~WorldGenThread()
+	{
+		run = false;
+		thread->join();
+		delete thread;
+	}
+
 	void WorldGenThread::create_thread()
 	{
 		thread = new std::thread(&WorldGenThread::loop, this);
@@ -15,26 +22,28 @@ namespace Game
 	void WorldGenThread::loop()
 	{
 		//Should probably add a kill signal so I can exit more cleanly than I do.
-		while(true)
+		while(run)
 		{
 			if(wg_cur != wg_end)
 			{
 				wg_cur = (wg_cur + 1) % MAX_TASKS;
 				if(world->chunks[wg_tasks[wg_cur].arr_x][0][wg_tasks[wg_cur].arr_z] != 0)
 				{
-//					delete world->chunks[wg_tasks[wg_cur].arr_x][0][wg_tasks[wg_cur].arr_z];
 					world->chunks[wg_tasks[wg_cur].arr_x][0][wg_tasks[wg_cur].arr_z]->cx = wg_tasks[wg_cur].x;
 					world->chunks[wg_tasks[wg_cur].arr_x][0][wg_tasks[wg_cur].arr_z]->cz = wg_tasks[wg_cur].z;
-					world->chunks[wg_tasks[wg_cur].arr_x][0][wg_tasks[wg_cur].arr_z]->initialise();
-					if (wg_tasks[wg_cur].arr_x == 15 && wg_tasks[wg_cur].arr_z == 6)
+					if (wg_tasks[wg_cur].x < 100 && wg_tasks[wg_cur].z < 100)
 					{
-//						std::cout << world->chunks[15][0][6]->cx << world->chunks[15][0][6]->cz << std::endl;
+						world->chunks[wg_tasks[wg_cur].arr_x][0][wg_tasks[wg_cur].arr_z]->initialise_from_file();
+					}
+					else
+					{
+						world->chunks[wg_tasks[wg_cur].arr_x][0][wg_tasks[wg_cur].arr_z]->initialise();
 					}
 				}
 				else
 				{				
 					world->chunks[wg_tasks[wg_cur].arr_x][0][wg_tasks[wg_cur].arr_z] = new Chunk(wg_tasks[wg_cur].x, 0, wg_tasks[wg_cur].z);
-					world->chunks[wg_tasks[wg_cur].arr_x][0][wg_tasks[wg_cur].arr_z]->initialise();
+					world->chunks[wg_tasks[wg_cur].arr_x][0][wg_tasks[wg_cur].arr_z]->initialise_from_file();
 				}
 //				std::cout << "Created chunk (" << wg_tasks[wg_cur].x << ", " << wg_tasks[wg_cur].z << ") at array (" << wg_tasks[wg_cur].arr_x << ", " << wg_tasks[wg_cur].arr_z << ")" << std::endl;
 			}
@@ -49,7 +58,11 @@ namespace Game
 				{
 					busy = false;				
 				}
+#ifdef __linux__
 				usleep(500*1000);
+#elif _WIN32
+				Sleep(500);
+#endif
 			}
 		}
 	}

@@ -19,6 +19,7 @@ namespace Game
 	    OggOpusFile *f;
 
 		Sound();
+		virtual ~Sound();
 
 		int fill_buffer(ALuint buffer, OggOpusFile* file);
 		int update_stream();

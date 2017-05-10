@@ -1,3 +1,7 @@
+/**
+ * Based on code at https://gitlab.com/wikibooks-opengl/modern-tutorials/tree/master/glescraft-sdl2
+ * which is in the public domain.
+ */
 #ifndef WORLD_WORLD_H
 #define WORLD_WORLD_H
 
@@ -19,7 +23,6 @@ namespace Game
 	struct World
 	{
 		Chunk* chunks[CHUNKS_X][CHUNKS_Y][CHUNKS_Z];
-		Block* colour;
 		int x_max;
 		int z_max;
 		int x_mpos;
@@ -31,6 +34,7 @@ namespace Game
 		int z_old = 0;
 
 		World();
+		virtual ~World();
 
 		Block* get(int x, int y, int z) const;
 		Chunk* get_chunk(int x, int y, int z) const;

@@ -1,3 +1,7 @@
+/**
+ * Based on code at https://gitlab.com/wikibooks-opengl/modern-tutorials/tree/master/glescraft-sdl2
+ * which is in the public domain.
+ */
 #include "physics.h"
 
 namespace Game
@@ -41,11 +45,38 @@ namespace Game
 		}
 		if(keys & 16)
 		{
-			position.y += movespeed * dt;
+			position.y += 2 * movespeed * dt;
 		}
-		if(keys & 32)
+//		if(keys & 32)
+//		{
+//			position.y -= movespeed * dt;
+//		}
+	}
+
+	void gravity(World* world)
+	{
+		static const float movespeed = 10;
+		float dt = (now - prev_ticks) * 1.0e-3;
+
+		float fx = floor(position.x);
+		float fz = floor(position.z);
+
+		position.y -= movespeed*dt;
+
+		int block_y = 0;
+		for(int y = Y - 1; y >= 0; y--)
 		{
-			position.y -= movespeed * dt;
+			if (world->get(fx, y, fz))
+			{
+				block_y = y;
+				break;
+			}
+		}
+
+		//This kind of results in some hilarious auto-jump mechanics
+		if(block_y + 1 > position.y - 1.8)
+		{
+			position.y = block_y + 2.8;
 		}
 	}
 

@@ -11,6 +11,7 @@ namespace Game
 		uint8_t type;
 
 		Block(): type(0) {};
+		virtual ~Block() = default;
 		Block(uint8_t type): type(type) {};
 
 		virtual bool rightClick() { return false; };	
